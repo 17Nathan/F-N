@@ -180,18 +180,19 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
 
 /* PUZZLE SCREEN */
 #puzzle-screen{width:100%;text-align:center;}
-.puzzle-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,3rem);font-style:italic;background:linear-gradient(135deg,var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
-.p-slot{width:44px;height:44px;background:rgba(255,255,255,.5);border:1px dashed rgba(232,160,176,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .2s;cursor:pointer;}
-.p-slot.filled{border-style:solid;border-color:rgba(109,200,122,.4);background:rgba(100,200,120,.08);}
-.p-slot.filled-photo{border-style:solid;border-color:rgba(109,200,122,.5);background:transparent;overflow:hidden;}
-.p-slot.highlight{border-color:var(--gold);background:rgba(212,168,67,.15);transform:scale(1.05);}
-.p-piece-hand{width:40px;height:40px;background:rgba(232,160,176,.1);border:1px solid rgba(232,160,176,.35);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:grab;transition:all .2s;user-select:none;}
-.p-piece-hand:hover{background:rgba(232,160,176,.2);transform:scale(1.1);}
-.p-piece-hand.selected-piece{border-color:var(--gold);background:rgba(212,168,67,.2);transform:scale(1.1);box-shadow:0 0 10px rgba(212,168,67,.4);}
-.p-piece-hand.locked{opacity:.35;cursor:not-allowed;filter:grayscale(1);}
-@keyframes pieceUnlock{0%{transform:scale(0) rotate(-180deg);opacity:0;}80%{transform:scale(1.2) rotate(5deg);}100%{transform:scale(1) rotate(0deg);opacity:1;}}
+.puzzle-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,3rem);font-style:italic;background:linear-gradient(135deg,#e8829a,#f0a0b5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
+.p-slot{width:46px;height:46px;background:rgba(240,200,210,.3);border:1px dashed rgba(196,96,122,.25);border-radius:4px;overflow:hidden;cursor:pointer;transition:border-color .15s,transform .15s;box-sizing:border-box;}
+.p-slot.highlight{border:2px solid #e8829a !important;background:rgba(232,160,176,.2);transform:scale(1.05);}
+.p-slot.filled{border:1px solid rgba(196,96,122,.35);cursor:default;}
+.p-slot.correct-flash{animation:correctFlash .5s ease;}
+@keyframes correctFlash{0%,100%{box-shadow:none;}50%{box-shadow:0 0 14px rgba(232,160,176,.9);}}
+.p-piece-hand{width:44px;height:44px;border:2px solid rgba(196,96,122,.3);border-radius:6px;overflow:hidden;cursor:grab;transition:all .2s;background:#f5e0e8;box-sizing:border-box;user-select:none;}
+.p-piece-hand:active{cursor:grabbing;}
+.p-piece-hand.selected-piece{border:2px solid #e8829a;box-shadow:0 0 12px rgba(232,160,176,.6);transform:scale(1.1);}
+#drag-ghost{position:fixed;pointer-events:none;z-index:99999;width:50px;height:50px;border-radius:6px;overflow:hidden;opacity:.88;border:2px solid #e8829a;box-shadow:0 8px 25px rgba(196,96,122,.4);transform:translate(-50%,-50%);}
+@keyframes pieceUnlock{0%{transform:scale(0) rotate(-20deg);opacity:0;}70%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0deg);opacity:1;}}
 .piece-unlock-anim{animation:pieceUnlock .5s cubic-bezier(.34,1.56,.64,1) forwards;}
-@keyframes slideIntoSlot{0%{opacity:0;transform:scale(1.3);}100%{opacity:1;transform:scale(1);}}
+@keyframes piecePop{0%{transform:scale(0);opacity:0;}60%{transform:scale(1.3);}100%{transform:scale(1);opacity:1;}}
 
 /* FINAL */
 #final-screen{text-align:center;animation:fadeIn 2s ease;}
@@ -286,25 +287,52 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
       <div class="love-gauge-label">❤️ Jauge d'amour <span id="love-score-txt">0 pts</span></div>
       <div class="love-gauge-bg"><div class="love-gauge-fill" id="love-gauge-fill" style="width:0%"></div></div>
     </div>
+    <!-- Piece counter (visible during game) -->
+    <div id="piece-counter" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;background:rgba(232,160,176,.1);border:1px solid rgba(196,96,122,.15);border-radius:50px;padding:5px 14px;width:fit-content;margin-left:auto;margin-right:auto;">
+      <span style="font-size:.8rem;">🧩</span>
+      <span id="piece-counter-txt" style="font-size:.8rem;color:#c4607a;font-weight:600;">0 / 77 pièces</span>
+      <div id="piece-counter-new" style="display:none;background:#e8829a;color:white;font-size:.65rem;padding:2px 7px;border-radius:50px;animation:piecePop .6s ease;">+1</div>
+    </div>
     <div class="level-card" id="level-card"></div>
   </div>
 
   <div id="puzzle-screen" class="hidden">
     <h2 class="puzzle-title">Tu l'as mérité... 🧩</h2>
-    <p id="puzzle-sub" style="color:rgba(42,16,32,.55);margin-bottom:6px;font-style:italic;text-align:center;">Quelque chose t'attend derrière ces pièces...</p>
-    <p style="color:var(--gold);font-size:.9rem;margin-bottom:10px;text-align:center;" id="p-prog">0 / 77 pièces placées</p>
+    <p style="color:rgba(42,16,32,.5);margin-bottom:14px;font-style:italic;text-align:center;font-size:.95rem;">Reconstitue la photo en glissant les pièces 💕</p>
 
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;width:100%;margin-bottom:12px;">
-      <!-- Zone de destination (puzzle à reconstituer) -->
-      <div>
-        <p style="font-size:.7rem;letter-spacing:.15em;color:var(--rose);text-transform:uppercase;text-align:center;margin-bottom:6px;">🖼️ Place les pièces ici</p>
-        <div id="puzzle-board" style="display:grid;grid-template-columns:repeat(7,44px);grid-template-rows:repeat(11,44px);gap:2px;background:rgba(232,160,176,.08);border:2px solid rgba(196,96,122,.2);border-radius:12px;padding:4px;position:relative;"></div>
+    <div id="puzzle-main" style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;">
+      <!-- Compteur + progression -->
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(232,160,176,.12);border:1px solid rgba(196,96,122,.2);border-radius:50px;padding:8px 18px;">
+        <span style="font-size:.85rem;color:#c4607a;">🧩</span>
+        <span id="p-prog" style="font-size:.9rem;color:#a03050;font-weight:600;">0 / 77 placées</span>
+        <div style="width:80px;height:5px;background:rgba(196,96,122,.15);border-radius:50px;overflow:hidden;">
+          <div id="puzzle-prog-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#e8829a,#f0a0b5);border-radius:50px;transition:width .5s ease;"></div>
+        </div>
       </div>
-      <!-- Pièces débloquées à placer -->
-      <div style="max-width:160px;">
-        <p style="font-size:.7rem;letter-spacing:.15em;color:var(--rose);text-transform:uppercase;text-align:center;margin-bottom:6px;">✨ Pièces débloquées</p>
-        <div id="puzzle-hand" style="display:flex;flex-wrap:wrap;gap:4px;background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:12px;padding:8px;min-height:60px;"></div>
-        <p style="font-size:.7rem;color:rgba(42,16,32,.3);text-align:center;margin-top:6px;" id="unlocked-count">0 / 77 débloquées</p>
+
+      <!-- Plateau puzzle -->
+      <div style="position:relative;">
+        <div id="puzzle-board" style="
+          display:grid;
+          grid-template-columns:repeat(7,46px);
+          grid-template-rows:repeat(11,46px);
+          gap:2px;
+          background:#f0d8e0;
+          border:2px solid rgba(196,96,122,.3);
+          border-radius:10px;
+          padding:3px;
+          box-shadow:0 8px 30px rgba(196,96,122,.15);
+        "></div>
+      </div>
+
+      <!-- Pièces disponibles (scrollable) -->
+      <div style="width:100%;max-width:360px;">
+        <p style="font-size:.72rem;letter-spacing:.15em;color:#c4607a;text-transform:uppercase;text-align:center;margin-bottom:7px;">✨ Pièces à placer — <span id="hand-count">0</span> restantes</p>
+        <div id="puzzle-hand" style="
+          display:flex;flex-wrap:wrap;gap:5px;justify-content:center;
+          background:rgba(255,255,255,.6);border:1px solid rgba(196,96,122,.2);
+          border-radius:14px;padding:10px;min-height:56px;max-height:200px;overflow-y:auto;
+        "></div>
       </div>
     </div>
   </div>
@@ -1334,172 +1362,261 @@ function nextLevel(){
 }
 
 // ══════════════════════════════════════════
-//  PUZZLE SYSTEM (77 pièces, débloquées progressivement)
+//  PUZZLE SYSTEM — vraie photo, drag & drop
 // ══════════════════════════════════════════
 // PUZZLE_COLS=7, PUZZLE_ROWS=11, PUZZLE_TOTAL=77 declared above
 
-// State
-let unlockedPieces = [];   // indices des pièces débloquées (0-76)
-let placedPieces = {};     // {slotIdx: pieceIdx} - pièces placées sur le board
-let selectedHandPiece = null; // indice dans unlockedPieces sélectionné
-let puzzlePhotoSrc = null;
+var unlockedPieces = [];
+var placedPieces = {};     // {slotIdx: pieceIdx}
+var puzzlePhotoSrc = null;
+var dragPieceIdx = null;   // piece being dragged
+var PIECE_SIZE = 46;       // px per piece
 
-// Emojis pour chaque pièce (différents pour chaque pièce)
-const PIECE_EMOJIS = ['💕','⭐','🌸','🔥','💎','🌺','✨','🦋','🌹','💫','🎀','🌙','💖','🌟','💝','🎵','🌈','🦄','🌊','💌','🎠','🌻','🍀','🪷','🌷','💛','🌿','🫧','🔮','🌴','💜','🧸','💟','🎯','🫐','🦚','💓','⚡','🎋','💗','🎪','💞','🍭','🎨','🏵','🌼','🍃','🌠','🎭','💗','🌺','🎶','💕','⭐','🌸','🔥','💎','🌺','✨','🦋','🌹','💫','🎀','🌙','💖','🌟','💝','🎵','🌈','🦄','🌊','💌','🎠','🌻','🍀','🪷','🌷','💛'];
-
-// Débloque les pièces en fonction du niveau actuel (appelé après chaque niveau)
-function updateUnlockedPieces(){
-  const shouldUnlock = Math.min(PUZZLE_TOTAL, Math.floor((currentLevel+1) / LEVELS_PER_PIECE));
-  let newUnlocked = false;
-  for(let i = unlockedPieces.length; i < shouldUnlock; i++){
-    unlockedPieces.push(i);
-    newUnlocked = true;
-  }
-  if(newUnlocked) showPieceUnlockToast(unlockedPieces.length);
-  // Update unlocked count if puzzle screen visible
-  const uc = document.getElementById('unlocked-count');
-  if(uc) uc.textContent = unlockedPieces.length + ' / ' + PUZZLE_TOTAL + ' débloquées';
+// ── Piece counter (visible in game) ──
+function updatePieceCounter(){
+  var el = document.getElementById('piece-counter-txt');
+  if(el) el.textContent = unlockedPieces.length + ' / ' + PUZZLE_TOTAL + ' pièces';
 }
 
-function showPieceUnlockToast(count){
-  if(count % 5 === 0 || count === 1){
-    admToast('🧩 ' + count + ' pièce' + (count>1?'s':'') + ' débloquée' + (count>1?'s':'') + ' !');
+function animatePieceUnlock(){
+  var badge = document.getElementById('piece-counter-new');
+  if(!badge) return;
+  badge.style.display = 'inline-block';
+  badge.style.animation = 'none';
+  void badge.offsetWidth;
+  badge.style.animation = 'piecePop .6s ease';
+  setTimeout(function(){ badge.style.display = 'none'; }, 1500);
+}
+
+function updateUnlockedPieces(){
+  var shouldUnlock = Math.min(PUZZLE_TOTAL, Math.floor((currentLevel+1) / LEVELS_PER_PIECE));
+  var newCount = 0;
+  for(var i = unlockedPieces.length; i < shouldUnlock; i++){
+    unlockedPieces.push(i);
+    newCount++;
   }
+  if(newCount > 0){
+    updatePieceCounter();
+    animatePieceUnlock();
+    if(newCount === 1) admToast('🧩 Nouvelle pièce débloquée !');
+    else if(newCount > 1) admToast('🧩 +' + newCount + ' pièces débloquées !');
+  }
+  var uc = document.getElementById('unlocked-count');
+  if(uc) uc.textContent = unlockedPieces.length + ' / ' + PUZZLE_TOTAL;
 }
 
 function startPuzzle(){
-  // Block if not all levels done (bypass for admin)
   if(currentLevel < TOTAL && !window._admBypass){
     admToast('Termine tous les niveaux d\'abord !');
     return;
   }
-  // Make sure all pieces unlocked when reaching puzzle naturally
-  unlockedPieces = Array.from({length:PUZZLE_TOTAL},(_,i)=>i);
+  unlockedPieces = Array.from({length:PUZZLE_TOTAL}, function(_,i){ return i; });
   document.getElementById('game').classList.add('hidden');
   document.getElementById('puzzle-screen').classList.remove('hidden');
-  selectedHandPiece = null;
-  renderPuzzleBoard();
+  initPuzzleBoard();
   renderPuzzleHand();
+  updatePuzzleProgress();
 }
 
-function renderPuzzleBoard(){
-  const board = document.getElementById('puzzle-board');
+// ── Draw board: empty slots + already-placed pieces ──
+function initPuzzleBoard(){
+  var board = document.getElementById('puzzle-board');
   if(!board) return;
   board.innerHTML = '';
-  for(let i = 0; i < PUZZLE_TOTAL; i++){
-    const slot = document.createElement('div');
+
+  for(var i = 0; i < PUZZLE_TOTAL; i++){
+    var slot = document.createElement('div');
     slot.className = 'p-slot';
     slot.dataset.slot = i;
+    (function(slotIdx){
+      slot.addEventListener('dragover', function(e){ e.preventDefault(); if(dragPieceIdx !== null) this.classList.add('highlight'); });
+      slot.addEventListener('dragleave', function(){ this.classList.remove('highlight'); });
+      slot.addEventListener('drop', function(e){ e.preventDefault(); this.classList.remove('highlight'); dropOnSlot(slotIdx); });
+      // Touch support
+      slot.addEventListener('touchend', function(e){ e.preventDefault(); dropOnSlot(slotIdx); }, {passive:false});
+    })(i);
 
     if(placedPieces[i] !== undefined){
-      const pieceIdx = placedPieces[i];
-      if(puzzlePhotoSrc && pieceIdx === i){
-        // Correct piece → show photo slice
-        const col = i % PUZZLE_COLS;
-        const row = Math.floor(i / PUZZLE_COLS);
-        slot.className = 'p-slot filled-photo';
-        slot.style.backgroundImage = `url('${puzzlePhotoSrc}')`;
-        slot.style.backgroundSize = `${PUZZLE_COLS*44}px ${PUZZLE_ROWS*44}px`;
-        slot.style.backgroundPosition = `${-(col*44)}px ${-(row*44)}px`;
-        slot.style.backgroundRepeat = 'no-repeat';
-      } else {
-        slot.className = 'p-slot filled';
-        slot.textContent = PIECE_EMOJIS[pieceIdx];
-      }
-      slot.style.animation = '';
-    } else {
-      slot.textContent = '';
+      fillSlotWithPhoto(slot, i, placedPieces[i]);
     }
-
-    slot.onclick = () => placePieceOnSlot(i);
     board.appendChild(slot);
-  }
-
-  const placed = Object.keys(placedPieces).length;
-  document.getElementById('p-prog').textContent = placed + ' / ' + PUZZLE_TOTAL + ' pièces placées';
-
-  // Check win: all pieces placed AND all in correct slot
-  const correct = Object.keys(placedPieces).filter(k => placedPieces[k] == k).length;
-  if(placed === PUZZLE_TOTAL && correct === PUZZLE_TOTAL){
-    setTimeout(puzzleWin, 600);
   }
 }
 
-function renderPuzzleHand(){
-  const hand = document.getElementById('puzzle-hand');
-  if(!hand) return;
+function fillSlotWithPhoto(slot, slotIdx, pieceIdx){
+  var col = pieceIdx % PUZZLE_COLS;
+  var row = Math.floor(pieceIdx / PUZZLE_COLS);
+  var totalW = PUZZLE_COLS * PIECE_SIZE;
+  var totalH = PUZZLE_ROWS * PIECE_SIZE;
 
-  // Only show pieces not yet placed
-  const placedVals = Object.values(placedPieces);
-  const available = unlockedPieces.filter(p => !placedVals.includes(p));
+  if(puzzlePhotoSrc){
+    slot.style.backgroundImage = "url('" + puzzlePhotoSrc + "')";
+    slot.style.backgroundSize = totalW + 'px ' + totalH + 'px';
+    slot.style.backgroundPosition = (-col * PIECE_SIZE) + 'px ' + (-row * PIECE_SIZE) + 'px';
+    slot.style.backgroundRepeat = 'no-repeat';
+  } else {
+    // placeholder rose avec numéro si pas de photo
+    slot.style.background = 'linear-gradient(135deg,#f0c0d0,#e8a0b8)';
+    slot.style.display = 'flex';
+    slot.style.alignItems = 'center';
+    slot.style.justifyContent = 'center';
+    slot.style.fontSize = '.55rem';
+    slot.style.color = 'rgba(160,48,80,.6)';
+    slot.textContent = (pieceIdx+1);
+  }
+  slot.classList.add('filled');
+  slot.draggable = false;
+}
+
+// ── Render hand pieces ──
+function renderPuzzleHand(){
+  var hand = document.getElementById('puzzle-hand');
+  if(!hand) return;
+  var placedVals = Object.values(placedPieces);
+  var available = unlockedPieces.filter(function(p){ return placedVals.indexOf(p) === -1; });
 
   hand.innerHTML = '';
   if(available.length === 0){
-    hand.innerHTML = '<p style="color:rgba(42,16,32,.3);font-size:.8rem;padding:8px;">Toutes placées ! 🎉</p>';
+    hand.innerHTML = '<p style="color:rgba(42,16,32,.35);font-size:.85rem;padding:10px;width:100%;text-align:center;">Toutes les pièces sont placées ! 🎉</p>';
   } else {
-    available.forEach(pieceIdx => {
-      const el = document.createElement('div');
-      el.className = 'p-piece-hand piece-unlock-anim';
-      el.textContent = PIECE_EMOJIS[pieceIdx];
-      el.dataset.piece = pieceIdx;
-      if(selectedHandPiece === pieceIdx) el.classList.add('selected-piece');
-      el.onclick = () => selectHandPiece(pieceIdx, el);
+    available.forEach(function(pieceIdx){
+      var el = createHandPiece(pieceIdx);
       hand.appendChild(el);
     });
   }
-
-  const uc = document.getElementById('unlocked-count');
-  if(uc) uc.textContent = unlockedPieces.length + ' / ' + PUZZLE_TOTAL + ' débloquées';
+  var hc = document.getElementById('hand-count');
+  if(hc) hc.textContent = available.length;
 }
 
-function selectHandPiece(pieceIdx, el){
-  selectedHandPiece = (selectedHandPiece === pieceIdx) ? null : pieceIdx;
-  // Highlight
-  document.querySelectorAll('.p-piece-hand').forEach(e => e.classList.remove('selected-piece'));
-  if(selectedHandPiece !== null && el) el.classList.add('selected-piece');
-  // Highlight board slots
-  document.querySelectorAll('.p-slot:not(.filled):not(.filled-photo)').forEach(s => {
-    s.classList.toggle('highlight', selectedHandPiece !== null);
+function createHandPiece(pieceIdx){
+  var el = document.createElement('div');
+  el.className = 'p-piece-hand piece-unlock-anim';
+  el.dataset.piece = pieceIdx;
+  el.draggable = true;
+
+  var col = pieceIdx % PUZZLE_COLS;
+  var row = Math.floor(pieceIdx / PUZZLE_COLS);
+  var totalW = PUZZLE_COLS * PIECE_SIZE;
+  var totalH = PUZZLE_ROWS * PIECE_SIZE;
+
+  if(puzzlePhotoSrc){
+    el.style.backgroundImage = "url('" + puzzlePhotoSrc + "')";
+    el.style.backgroundSize = totalW + 'px ' + totalH + 'px';
+    el.style.backgroundPosition = (-col * PIECE_SIZE) + 'px ' + (-row * PIECE_SIZE) + 'px';
+    el.style.backgroundRepeat = 'no-repeat';
+  } else {
+    el.style.background = 'linear-gradient(135deg,#f5d0e0,#eebbd0)';
+    el.style.display = 'flex';
+    el.style.alignItems = 'center';
+    el.style.justifyContent = 'center';
+    el.style.fontSize = '.6rem';
+    el.style.color = 'rgba(160,48,80,.7)';
+    el.textContent = (pieceIdx+1);
+  }
+
+  // Drag events
+  el.addEventListener('dragstart', function(e){
+    dragPieceIdx = pieceIdx;
+    el.classList.add('dragging-active');
+    // Custom drag image
+    var ghost = document.getElementById('drag-ghost');
+    if(!ghost){ ghost = document.createElement('div'); ghost.id='drag-ghost'; document.body.appendChild(ghost); }
+    ghost.style.backgroundImage = el.style.backgroundImage;
+    ghost.style.backgroundSize = el.style.backgroundSize;
+    ghost.style.backgroundPosition = el.style.backgroundPosition;
+    ghost.style.backgroundRepeat = 'no-repeat';
+    ghost.style.display = 'block';
+    ghost.style.left = '-999px';
+    ghost.style.top = '-999px';
+    if(e.dataTransfer) e.dataTransfer.setDragImage(ghost, 25, 25);
   });
+  el.addEventListener('dragend', function(){
+    el.classList.remove('dragging-active');
+    dragPieceIdx = null;
+  });
+
+  // Touch drag
+  el.addEventListener('touchstart', function(e){
+    dragPieceIdx = pieceIdx;
+    el.classList.add('selected-piece');
+  }, {passive:true});
+
+  // Click to select (for tap-to-place)
+  el.addEventListener('click', function(){
+    if(dragPieceIdx === pieceIdx){
+      dragPieceIdx = null;
+      document.querySelectorAll('.p-piece-hand').forEach(function(e){ e.classList.remove('selected-piece'); });
+      document.querySelectorAll('.p-slot').forEach(function(s){ s.classList.remove('highlight'); });
+    } else {
+      dragPieceIdx = pieceIdx;
+      document.querySelectorAll('.p-piece-hand').forEach(function(e){ e.classList.remove('selected-piece'); });
+      el.classList.add('selected-piece');
+      document.querySelectorAll('.p-slot:not(.filled)').forEach(function(s){ s.classList.add('highlight'); });
+    }
+  });
+
+  return el;
 }
 
-function placePieceOnSlot(slotIdx){
-  if(selectedHandPiece === null) return;
+function dropOnSlot(slotIdx){
+  if(dragPieceIdx === null) return;
   if(placedPieces[slotIdx] !== undefined) return; // already filled
+  var pieceIdx = dragPieceIdx;
+  dragPieceIdx = null;
 
-  // Animate slide
-  placedPieces[slotIdx] = selectedHandPiece;
-  selectedHandPiece = null;
+  placedPieces[slotIdx] = pieceIdx;
+  saveProgress();
 
-  // Remove highlight
-  document.querySelectorAll('.p-slot').forEach(s => s.classList.remove('highlight'));
+  // Update slot visually
+  var slots = document.querySelectorAll('.p-slot');
+  var slot = slots[slotIdx];
+  if(slot){
+    fillSlotWithPhoto(slot, slotIdx, pieceIdx);
+    slot.classList.add('correct-flash');
+    setTimeout(function(){ slot.classList.remove('correct-flash'); }, 500);
+  }
 
-  // Check if correct
-  const correct = (placedPieces[slotIdx] == slotIdx);
-  if(correct) spawnHearts();
+  // Remove highlight from all slots
+  document.querySelectorAll('.p-slot').forEach(function(s){ s.classList.remove('highlight'); });
 
-  renderPuzzleBoard();
+  // Update hand
   renderPuzzleHand();
+  updatePuzzleProgress();
+
+  // Win check
+  if(Object.keys(placedPieces).length === PUZZLE_TOTAL){
+    setTimeout(puzzleWin, 700);
+  }
+}
+
+function updatePuzzleProgress(){
+  var placed = Object.keys(placedPieces).length;
+  var pp = document.getElementById('p-prog');
+  if(pp) pp.textContent = placed + ' / ' + PUZZLE_TOTAL + ' placées';
+  var bar = document.getElementById('puzzle-prog-bar');
+  if(bar) bar.style.width = Math.round((placed/PUZZLE_TOTAL)*100) + '%';
 }
 
 function puzzleWin(){
-  // Final photo full reveal then go to final screen
-  if(puzzlePhotoSrc){
-    // Make board into one big photo
-    const board = document.getElementById('puzzle-board');
-    if(board){
-      board.style.background = `url('${puzzlePhotoSrc}') center/cover`;
-      board.style.borderColor = 'rgba(212,168,67,.8)';
-      board.style.boxShadow = '0 0 40px rgba(212,168,67,.5)';
-      board.querySelectorAll('.p-slot').forEach(s => { s.style.opacity='0'; });
-    }
+  // Reveal full photo on board
+  var board = document.getElementById('puzzle-board');
+  if(board && puzzlePhotoSrc){
+    board.style.backgroundImage = "url('" + puzzlePhotoSrc + "')";
+    board.style.backgroundSize = 'cover';
+    board.style.backgroundPosition = 'center';
+    board.style.border = '3px solid #e8829a';
+    board.style.boxShadow = '0 0 40px rgba(232,160,176,.6)';
+    board.querySelectorAll('.p-slot').forEach(function(s){
+      s.style.opacity = '0';
+      s.style.transition = 'opacity .4s';
+    });
   }
   spawnConfetti();
   setTimeout(spawnConfetti, 800);
-  setTimeout(()=>{
+  setTimeout(function(){
     document.getElementById('puzzle-screen').classList.add('hidden');
     showFinal();
-  }, 2500);
+  }, 2800);
 }
 
 // ══════════════════════════════════════════
@@ -1577,7 +1694,7 @@ function openAdm() {
   var msgEl = document.getElementById('adm-msg');
   if (msgEl) msgEl.value = admMsg || FINAL_MESSAGE;
   var ep = document.getElementById('adm-ep');
-  if (ep) ep.value = PUZZLE_EMOJIS.join(',');
+  if (ep) ep.value = PIECE_EMOJIS.join(',');
   var fileEl = document.getElementById('adm-file');
   if (fileEl) fileEl.onchange = admPhotoFile;
 }
@@ -1715,19 +1832,12 @@ function admPhotoFile() {
 function admApplyPhoto(src) {
   var fp = document.getElementById('final-photo');
   if (fp) fp.innerHTML = '<img src="' + src + '" alt="photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
-  // Also store for puzzle reveal
   puzzlePhotoSrc = src;
-  // Draw on canvas
-  var canvas = document.getElementById('puzzle-photo-canvas');
-  if(canvas){
-    var img = new Image();
-    img.onload = function(){
-      var ctx = canvas.getContext('2d');
-      canvas.width = PUZZLE_COLS * PIECE_W;
-      canvas.height = PUZZLE_ROWS * PIECE_H;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    };
-    img.src = src;
+  // Refresh puzzle board if open
+  var ps = document.getElementById('puzzle-screen');
+  if(ps && !ps.classList.contains('hidden')){
+    initPuzzleBoard();
+    renderPuzzleHand();
   }
 }
 
@@ -1754,10 +1864,12 @@ function admSaveClick() {
 function admSavePuzzle() {
   var val = document.getElementById('adm-ep').value || '';
   var arr = val.split(',').map(function(e){ return e.trim(); }).filter(Boolean);
-  if (arr.length < 25) { admToast('Il faut 25 emojis !'); return; }
-  PUZZLE_EMOJIS.splice(0, PUZZLE_EMOJIS.length);
-  arr.slice(0,25).forEach(function(e){ PUZZLE_EMOJIS.push(e); });
-  admToast('Puzzle mis à jour !');
+  if (arr.length < 1) { admToast('Entre au moins un emoji !'); return; }
+  // Fill all 77 slots cycling through provided emojis
+  for(var i = 0; i < PIECE_EMOJIS.length; i++){
+    PIECE_EMOJIS[i] = arr[i % arr.length];
+  }
+  admToast('Emojis puzzle mis à jour !');
 }
 
 // Patch showFinal to use custom message/photo
@@ -1909,18 +2021,7 @@ function toggleBeigeTheme(){
           <button class="adm-btn" onclick="admGo()">Aller →</button>
         </div>
       </div>
-      <div class="adm-section">
-        <div class="adm-label">Aller par jour</div>
-        <div class="adm-row">
-          <button class="adm-btn sec" onclick="admDay(1)">Jour 1</button>
-          <button class="adm-btn sec" onclick="admDay(2)">Jour 2</button>
-          <button class="adm-btn sec" onclick="admDay(3)">Jour 3</button>
-          <button class="adm-btn sec" onclick="admDay(4)">Jour 4</button>
-          <button class="adm-btn sec" onclick="admDay(5)">Jour 5</button>
-          <button class="adm-btn sec" onclick="admDay(6)">Jour 6</button>
-          <button class="adm-btn sec" onclick="admDay(7)">Jour 7</button>
-        </div>
-      </div>
+
       <div class="adm-section">
         <div class="adm-label">Aller par type de jeu</div>
         <div class="adm-row">
@@ -2007,7 +2108,7 @@ function toggleBeigeTheme(){
         </div>
       </div>
       <div class="adm-section">
-        <div class="adm-label">Emojis puzzle (25, séparés par virgule)</div>
+        <div class="adm-label">Emojis puzzle (séparés par virgule, ex: 💕,⭐,🌸)</div>
         <input class="adm-in" id="adm-ep" style="width:100%" placeholder="💕,⭐,🌸,...">
         <div class="adm-row" style="margin-top:8px">
           <button class="adm-btn" onclick="admSavePuzzle()">OK</button>
