@@ -179,10 +179,17 @@ body{background:var(--dark);color:var(--cream);font-family:'Lato',sans-serif;min
 /* PUZZLE SCREEN */
 #puzzle-screen{width:100%;text-align:center;}
 .puzzle-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,3rem);font-style:italic;background:linear-gradient(135deg,var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
-.puzzle-grid{display:inline-grid;gap:4px;border:2px solid rgba(212,168,67,.25);border-radius:14px;overflow:hidden;padding:4px;background:rgba(0,0,0,.3);}
-.p-piece{width:75px;height:75px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:all .25s;}
-.p-piece.selected{border-color:var(--gold);box-shadow:0 0 14px rgba(212,168,67,.5);}
-.p-piece:hover:not(.empty){border-color:var(--rose);}
+.p-slot{width:44px;height:44px;background:rgba(255,255,255,.03);border:1px dashed rgba(232,160,176,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .2s;cursor:pointer;}
+.p-slot.filled{border-style:solid;border-color:rgba(109,200,122,.4);background:rgba(100,200,120,.08);}
+.p-slot.filled-photo{border-style:solid;border-color:rgba(109,200,122,.5);background:transparent;overflow:hidden;}
+.p-slot.highlight{border-color:var(--gold);background:rgba(212,168,67,.15);transform:scale(1.05);}
+.p-piece-hand{width:40px;height:40px;background:rgba(232,160,176,.1);border:1px solid rgba(232,160,176,.35);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:grab;transition:all .2s;user-select:none;}
+.p-piece-hand:hover{background:rgba(232,160,176,.2);transform:scale(1.1);}
+.p-piece-hand.selected-piece{border-color:var(--gold);background:rgba(212,168,67,.2);transform:scale(1.1);box-shadow:0 0 10px rgba(212,168,67,.4);}
+.p-piece-hand.locked{opacity:.35;cursor:not-allowed;filter:grayscale(1);}
+@keyframes pieceUnlock{0%{transform:scale(0) rotate(-180deg);opacity:0;}80%{transform:scale(1.2) rotate(5deg);}100%{transform:scale(1) rotate(0deg);opacity:1;}}
+.piece-unlock-anim{animation:pieceUnlock .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes slideIntoSlot{0%{opacity:0;transform:scale(1.3);}100%{opacity:1;transform:scale(1);}}
 
 /* FINAL */
 #final-screen{text-align:center;animation:fadeIn 2s ease;}
@@ -243,6 +250,7 @@ body{background:var(--dark);color:var(--cream);font-family:'Lato',sans-serif;min
 .adm-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a0a10;border:1px solid #d4a843;color:#fdf6ee;padding:10px 22px;border-radius:50px;font-size:.88rem;z-index:99999;pointer-events:none;animation:toastPop .3s ease;}
 @keyframes toastPop{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 .adm-img-prev{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,168,67,.4);display:none;margin-top:8px;}
+.hidden{display:none!important;}
 
 </style>
 </head>
@@ -269,17 +277,29 @@ body{background:var(--dark);color:var(--cream);font-family:'Lato',sans-serif;min
     </div>
     <div class="love-gauge-wrap">
       <div class="love-gauge-label">❤️ Jauge d'amour <span id="love-score-txt">0 pts</span></div>
-      <div class="love-gauge-bg"><div class="love-gauge-fill" id="love-gauge-fill" style="width:50%"></div></div>
+      <div class="love-gauge-bg"><div class="love-gauge-fill" id="love-gauge-fill" style="width:0%"></div></div>
     </div>
     <div class="level-card" id="level-card"></div>
   </div>
 
   <div id="puzzle-screen" class="hidden">
-    <h2 class="puzzle-title">Tu l'as mérité ! 🧩</h2>
-    <p style="color:rgba(253,246,238,.55);margin-bottom:18px;font-style:italic">Reconstitue le puzzle pour révéler la surprise...</p>
-    <p style="color:var(--gold);font-size:.9rem;margin-bottom:14px" id="p-prog">0 / 25 pièces</p>
-    <div class="puzzle-grid" id="puzzle-grid" style="grid-template-columns:repeat(5,75px)"></div>
-    <p style="color:rgba(253,246,238,.35);font-size:.8rem;margin-top:10px">Clique deux pièces pour les échanger</p>
+    <h2 class="puzzle-title">Tu l'as mérité... 🧩</h2>
+    <p id="puzzle-sub" style="color:rgba(253,246,238,.55);margin-bottom:6px;font-style:italic;text-align:center;">Quelque chose t'attend derrière ces pièces...</p>
+    <p style="color:var(--gold);font-size:.9rem;margin-bottom:10px;text-align:center;" id="p-prog">0 / 77 pièces placées</p>
+
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;width:100%;margin-bottom:12px;">
+      <!-- Zone de destination (puzzle à reconstituer) -->
+      <div>
+        <p style="font-size:.7rem;letter-spacing:.15em;color:var(--rose);text-transform:uppercase;text-align:center;margin-bottom:6px;">🖼️ Place les pièces ici</p>
+        <div id="puzzle-board" style="display:grid;grid-template-columns:repeat(7,44px);grid-template-rows:repeat(11,44px);gap:2px;background:rgba(0,0,0,.4);border:2px solid rgba(212,168,67,.3);border-radius:12px;padding:4px;position:relative;"></div>
+      </div>
+      <!-- Pièces débloquées à placer -->
+      <div style="max-width:160px;">
+        <p style="font-size:.7rem;letter-spacing:.15em;color:var(--rose);text-transform:uppercase;text-align:center;margin-bottom:6px;">✨ Pièces débloquées</p>
+        <div id="puzzle-hand" style="display:flex;flex-wrap:wrap;gap:4px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:8px;min-height:60px;"></div>
+        <p style="font-size:.7rem;color:rgba(253,246,238,.3);text-align:center;margin-top:6px;" id="unlocked-count">0 / 77 débloquées</p>
+      </div>
+    </div>
   </div>
 
   <div id="final-screen" class="hidden">
@@ -1225,8 +1245,10 @@ function nextLevel(){
   if(sliderAnim){cancelAnimationFrame(sliderAnim);sliderAnim=null;}
   document.onkeydown=null;
   currentLevel++;
+  updateUnlockedPieces();
   if(currentLevel>=TOTAL){
     document.getElementById('game').classList.add('hidden');
+    window._admBypass = true;
     startPuzzle();
   }else{
     renderLevel();
@@ -1234,35 +1256,173 @@ function nextLevel(){
 }
 
 // ══════════════════════════════════════════
-//  PUZZLE
+//  PUZZLE SYSTEM (77 pièces, débloquées progressivement)
 // ══════════════════════════════════════════
-let puzzlePieces=[],selectedPiece=null,puzzleSolved=0;
-const PUZZLE_SIZE=5;
-let PUZZLE_EMOJIS=['💕','⭐','🌸','🔥','💎','🌺','✨','🦋','🌹','💫','🎀','🌙','💖','🌟','💝','🎵','🌈','🦄','🌊','💌','🎠','🌻','🍀','🪷','🌷'];
+const PUZZLE_COLS = 7, PUZZLE_ROWS = 11, PUZZLE_TOTAL = 77;
+const LEVELS_PER_PIECE = Math.floor(TOTAL / PUZZLE_TOTAL); // ~10 niveaux par pièce
+
+// State
+let unlockedPieces = [];   // indices des pièces débloquées (0-76)
+let placedPieces = {};     // {slotIdx: pieceIdx} - pièces placées sur le board
+let selectedHandPiece = null; // indice dans unlockedPieces sélectionné
+let puzzlePhotoSrc = null;
+
+// Emojis pour chaque pièce (différents pour chaque pièce)
+const PIECE_EMOJIS = ['💕','⭐','🌸','🔥','💎','🌺','✨','🦋','🌹','💫','🎀','🌙','💖','🌟','💝','🎵','🌈','🦄','🌊','💌','🎠','🌻','🍀','🪷','🌷','💛','🌿','🫧','🔮','🌴','💜','🧸','💟','🎯','🫐','🦚','💓','⚡','🎋','💗','🎪','💞','🍭','🎨','🏵','🌼','🍃','🌠','🎭','💗','🌺','🎶','💕','⭐','🌸','🔥','💎','🌺','✨','🦋','🌹','💫','🎀','🌙','💖','🌟','💝','🎵','🌈','🦄','🌊','💌','🎠','🌻','🍀','🪷','🌷','💛'];
+
+// Débloque les pièces en fonction du niveau actuel (appelé après chaque niveau)
+function updateUnlockedPieces(){
+  const shouldUnlock = Math.min(PUZZLE_TOTAL, Math.floor((currentLevel+1) / LEVELS_PER_PIECE));
+  let newUnlocked = false;
+  for(let i = unlockedPieces.length; i < shouldUnlock; i++){
+    unlockedPieces.push(i);
+    newUnlocked = true;
+  }
+  if(newUnlocked) showPieceUnlockToast(unlockedPieces.length);
+  // Update unlocked count if puzzle screen visible
+  const uc = document.getElementById('unlocked-count');
+  if(uc) uc.textContent = unlockedPieces.length + ' / ' + PUZZLE_TOTAL + ' débloquées';
+}
+
+function showPieceUnlockToast(count){
+  if(count % 5 === 0 || count === 1){
+    admToast('🧩 ' + count + ' pièce' + (count>1?'s':'') + ' débloquée' + (count>1?'s':'') + ' !');
+  }
+}
 
 function startPuzzle(){
-  document.getElementById('puzzle-screen').classList.remove('hidden');
-  puzzleSolved=0;selectedPiece=null;
-  puzzlePieces=Array.from({length:PUZZLE_SIZE*PUZZLE_SIZE},(_,i)=>i);
-  for(let i=puzzlePieces.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[puzzlePieces[i],puzzlePieces[j]]=[puzzlePieces[j],puzzlePieces[i]];}
-  renderPuzzle();
-}
-function renderPuzzle(){
-  const grid=document.getElementById('puzzle-grid');
-  grid.innerHTML=puzzlePieces.map((p,i)=>`<div class="p-piece" data-i="${i}" onclick="selectPuzzle(${i})">${PUZZLE_EMOJIS[p]}</div>`).join('');
-  const solved=puzzlePieces.filter((p,i)=>p===i).length;
-  document.getElementById('p-prog').textContent=`${solved} / ${PUZZLE_SIZE*PUZZLE_SIZE} pièces`;
-  if(solved===PUZZLE_SIZE*PUZZLE_SIZE){spawnConfetti();setTimeout(showFinal,1500);}
-}
-function selectPuzzle(idx){
-  const pieces=document.querySelectorAll('.p-piece');
-  if(selectedPiece===null){selectedPiece=idx;pieces[idx].classList.add('selected');}
-  else{
-    if(selectedPiece===idx){pieces[idx].classList.remove('selected');selectedPiece=null;return;}
-    [puzzlePieces[selectedPiece],puzzlePieces[idx]]=[puzzlePieces[idx],puzzlePieces[selectedPiece]];
-    pieces[selectedPiece].classList.remove('selected');selectedPiece=null;
-    renderPuzzle();
+  // Block if not all levels done (bypass for admin)
+  if(currentLevel < TOTAL && !window._admBypass){
+    admToast('Termine tous les niveaux d\'abord !');
+    return;
   }
+  // Make sure all pieces unlocked when reaching puzzle naturally
+  unlockedPieces = Array.from({length:PUZZLE_TOTAL},(_,i)=>i);
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('puzzle-screen').classList.remove('hidden');
+  selectedHandPiece = null;
+  renderPuzzleBoard();
+  renderPuzzleHand();
+}
+
+function renderPuzzleBoard(){
+  const board = document.getElementById('puzzle-board');
+  if(!board) return;
+  board.innerHTML = '';
+  for(let i = 0; i < PUZZLE_TOTAL; i++){
+    const slot = document.createElement('div');
+    slot.className = 'p-slot';
+    slot.dataset.slot = i;
+
+    if(placedPieces[i] !== undefined){
+      const pieceIdx = placedPieces[i];
+      if(puzzlePhotoSrc && pieceIdx === i){
+        // Correct piece → show photo slice
+        const col = i % PUZZLE_COLS;
+        const row = Math.floor(i / PUZZLE_COLS);
+        slot.className = 'p-slot filled-photo';
+        slot.style.backgroundImage = `url('${puzzlePhotoSrc}')`;
+        slot.style.backgroundSize = `${PUZZLE_COLS*44}px ${PUZZLE_ROWS*44}px`;
+        slot.style.backgroundPosition = `${-(col*44)}px ${-(row*44)}px`;
+        slot.style.backgroundRepeat = 'no-repeat';
+      } else {
+        slot.className = 'p-slot filled';
+        slot.textContent = PIECE_EMOJIS[pieceIdx];
+      }
+      slot.style.animation = '';
+    } else {
+      slot.textContent = '';
+    }
+
+    slot.onclick = () => placePieceOnSlot(i);
+    board.appendChild(slot);
+  }
+
+  const placed = Object.keys(placedPieces).length;
+  document.getElementById('p-prog').textContent = placed + ' / ' + PUZZLE_TOTAL + ' pièces placées';
+
+  // Check win: all pieces placed AND all in correct slot
+  const correct = Object.keys(placedPieces).filter(k => placedPieces[k] == k).length;
+  if(placed === PUZZLE_TOTAL && correct === PUZZLE_TOTAL){
+    setTimeout(puzzleWin, 600);
+  }
+}
+
+function renderPuzzleHand(){
+  const hand = document.getElementById('puzzle-hand');
+  if(!hand) return;
+
+  // Only show pieces not yet placed
+  const placedVals = Object.values(placedPieces);
+  const available = unlockedPieces.filter(p => !placedVals.includes(p));
+
+  hand.innerHTML = '';
+  if(available.length === 0){
+    hand.innerHTML = '<p style="color:rgba(253,246,238,.3);font-size:.8rem;padding:8px;">Toutes placées ! 🎉</p>';
+  } else {
+    available.forEach(pieceIdx => {
+      const el = document.createElement('div');
+      el.className = 'p-piece-hand piece-unlock-anim';
+      el.textContent = PIECE_EMOJIS[pieceIdx];
+      el.dataset.piece = pieceIdx;
+      if(selectedHandPiece === pieceIdx) el.classList.add('selected-piece');
+      el.onclick = () => selectHandPiece(pieceIdx, el);
+      hand.appendChild(el);
+    });
+  }
+
+  const uc = document.getElementById('unlocked-count');
+  if(uc) uc.textContent = unlockedPieces.length + ' / ' + PUZZLE_TOTAL + ' débloquées';
+}
+
+function selectHandPiece(pieceIdx, el){
+  selectedHandPiece = (selectedHandPiece === pieceIdx) ? null : pieceIdx;
+  // Highlight
+  document.querySelectorAll('.p-piece-hand').forEach(e => e.classList.remove('selected-piece'));
+  if(selectedHandPiece !== null && el) el.classList.add('selected-piece');
+  // Highlight board slots
+  document.querySelectorAll('.p-slot:not(.filled):not(.filled-photo)').forEach(s => {
+    s.classList.toggle('highlight', selectedHandPiece !== null);
+  });
+}
+
+function placePieceOnSlot(slotIdx){
+  if(selectedHandPiece === null) return;
+  if(placedPieces[slotIdx] !== undefined) return; // already filled
+
+  // Animate slide
+  placedPieces[slotIdx] = selectedHandPiece;
+  selectedHandPiece = null;
+
+  // Remove highlight
+  document.querySelectorAll('.p-slot').forEach(s => s.classList.remove('highlight'));
+
+  // Check if correct
+  const correct = (placedPieces[slotIdx] == slotIdx);
+  if(correct) spawnHearts();
+
+  renderPuzzleBoard();
+  renderPuzzleHand();
+}
+
+function puzzleWin(){
+  // Final photo full reveal then go to final screen
+  if(puzzlePhotoSrc){
+    // Make board into one big photo
+    const board = document.getElementById('puzzle-board');
+    if(board){
+      board.style.background = `url('${puzzlePhotoSrc}') center/cover`;
+      board.style.borderColor = 'rgba(212,168,67,.8)';
+      board.style.boxShadow = '0 0 40px rgba(212,168,67,.5)';
+      board.querySelectorAll('.p-slot').forEach(s => { s.style.opacity='0'; });
+    }
+  }
+  spawnConfetti();
+  setTimeout(spawnConfetti, 800);
+  setTimeout(()=>{
+    document.getElementById('puzzle-screen').classList.add('hidden');
+    showFinal();
+  }, 2500);
 }
 
 // ══════════════════════════════════════════
@@ -1425,7 +1585,31 @@ function admReset() {
   closeAdm();
 }
 
-function admPhotoUrl() {
+function admGivePieces(n){
+  var count = n || parseInt(document.getElementById('adm-pieces').value) || 0;
+  if(count < 1 || count > 77){ admToast('Entre un nombre entre 1 et 77'); return; }
+  for(var i = unlockedPieces.length; i < Math.min(77, count); i++){
+    if(!unlockedPieces.includes(i)) unlockedPieces.push(i);
+  }
+  // Make sure count pieces unlocked
+  unlockedPieces = Array.from({length: Math.min(77, Math.max(unlockedPieces.length, count))}, (_,i)=>i);
+  admToast('🧩 ' + unlockedPieces.length + ' pièces débloquées !');
+  if(document.getElementById('puzzle-screen') && !document.getElementById('puzzle-screen').classList.contains('hidden')){
+    renderPuzzleHand();
+  }
+  closeAdm();
+}
+
+function admGoToPuzzle(){
+  window._admBypass = true;
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('final-screen').classList.add('hidden');
+  document.getElementById('intro').classList.add('hidden');
+  startPuzzle();
+  closeAdm();
+}
+
+function admPuzzle(){ admGoToPuzzle(); }
   var url = (document.getElementById('adm-url').value || '').trim();
   if (!url) return;
   admPhoto = url;
@@ -1449,6 +1633,20 @@ function admPhotoFile() {
 function admApplyPhoto(src) {
   var fp = document.getElementById('final-photo');
   if (fp) fp.innerHTML = '<img src="' + src + '" alt="photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+  // Also store for puzzle reveal
+  puzzlePhotoSrc = src;
+  // Draw on canvas
+  var canvas = document.getElementById('puzzle-photo-canvas');
+  if(canvas){
+    var img = new Image();
+    img.onload = function(){
+      var ctx = canvas.getContext('2d');
+      canvas.width = PUZZLE_COLS * PIECE_W;
+      canvas.height = PUZZLE_ROWS * PIECE_H;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    img.src = src;
+  }
 }
 
 function admSaveMsg() {
@@ -1502,24 +1700,97 @@ showFinal = function() {
   setTimeout(spawnConfetti, 2000);
 };
 
-// Secret access: tap 7 times bottom-left corner
+// ══════════════════════════════════════════
+//  SECRET ACCESS: 7 taps bas-gauche → code 7575
+// ══════════════════════════════════════════
 (function(){
   var tapCount = 0;
   var tapTimer = null;
   var zone = document.createElement('div');
-  zone.style.cssText = 'position:fixed;bottom:0;left:0;width:60px;height:60px;z-index:9998;';
+  zone.style.cssText = 'position:fixed;bottom:0;left:0;width:70px;height:70px;z-index:9998;';
   document.body.appendChild(zone);
   zone.addEventListener('click', function(){
     tapCount++;
     if(tapTimer) clearTimeout(tapTimer);
     if(tapCount >= 7){
       tapCount = 0;
-      openAdm();
+      askAdminCode();
     } else {
-      tapTimer = setTimeout(function(){ tapCount = 0; }, 2000);
+      tapTimer = setTimeout(function(){ tapCount = 0; }, 2500);
     }
   });
 })();
+
+function askAdminCode(){
+  // Create a discreet code input overlay
+  var existing = document.getElementById('code-overlay');
+  if(existing){ existing.remove(); return; }
+  var overlay = document.createElement('div');
+  overlay.id = 'code-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML = `
+    <div style="background:#0d0508;border:1px solid #d4a843;border-radius:20px;padding:28px;text-align:center;width:260px;">
+      <p style="font-family:'Dancing Script',cursive;font-size:1.5rem;color:#d4a843;margin-bottom:16px;">🔐 Code secret</p>
+      <input id="admin-code-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••"
+        style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(232,160,176,.3);color:#fdf6ee;padding:12px;border-radius:10px;font-size:1.4rem;text-align:center;letter-spacing:.4em;outline:none;margin-bottom:14px;">
+      <div style="display:flex;gap:8px;">
+        <button onclick="checkAdminCode()" style="flex:1;background:linear-gradient(135deg,#c4607a,#d4a843);border:none;color:white;padding:11px;border-radius:10px;cursor:pointer;font-size:.9rem;">Entrer</button>
+        <button onclick="document.getElementById('code-overlay').remove()" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:rgba(253,246,238,.5);padding:11px;border-radius:10px;cursor:pointer;font-size:.9rem;">Annuler</button>
+      </div>
+      <p id="code-err" style="color:#f0a0a0;font-size:.8rem;margin-top:8px;min-height:18px;"></p>
+    </div>`;
+  document.body.appendChild(overlay);
+  setTimeout(()=>{ var inp=document.getElementById('admin-code-input'); if(inp) inp.focus(); }, 100);
+  // Enter key
+  overlay.querySelector('input').addEventListener('keydown', function(e){ if(e.key==='Enter') checkAdminCode(); });
+}
+
+function checkAdminCode(){
+  var input = document.getElementById('admin-code-input');
+  var code = input ? input.value.trim() : '';
+  if(code === '7575'){
+    document.getElementById('code-overlay').remove();
+    openAdm();
+  } else {
+    var err = document.getElementById('code-err');
+    if(err) err.textContent = '❌ Code incorrect';
+    if(input) { input.value=''; input.focus(); }
+  }
+}
+
+// ══════════════════════════════════════════
+//  THÈME BEIGE/ROSE (activé par code 7575)
+// ══════════════════════════════════════════
+var beigeThemeActive = false;
+function toggleBeigeTheme(){
+  beigeThemeActive = !beigeThemeActive;
+  var r = document.documentElement;
+  if(beigeThemeActive){
+    r.style.setProperty('--dark','#fdf0e8');
+    r.style.setProperty('--mid','#f5e4d8');
+    r.style.setProperty('--cream','#3a1a2a');
+    r.style.setProperty('--glass','rgba(255,255,255,0.6)');
+    r.style.setProperty('--border','rgba(196,96,122,0.25)');
+    r.style.setProperty('--rose','#c4607a');
+    r.style.setProperty('--rose-dark','#a03050');
+    r.style.setProperty('--gold','#b8860b');
+    document.body.style.background = '#fdf0e8';
+    document.querySelector('.bg').style.background = 'radial-gradient(ellipse at 15% 50%,#f5c8d8 0%,transparent 55%),radial-gradient(ellipse at 85% 20%,#ffe8f0 0%,transparent 55%),radial-gradient(ellipse at 60% 85%,#ffeedd 0%,transparent 45%),#fdf0e8';
+    admToast('🌸 Thème rose/beige activé !');
+  } else {
+    r.style.setProperty('--dark','#0d0508');
+    r.style.setProperty('--mid','#1a0a10');
+    r.style.setProperty('--cream','#fdf6ee');
+    r.style.setProperty('--glass','rgba(255,255,255,0.07)');
+    r.style.setProperty('--border','rgba(232,160,176,0.2)');
+    r.style.setProperty('--rose','#e8a0b0');
+    r.style.setProperty('--rose-dark','#c4607a');
+    r.style.setProperty('--gold','#d4a843');
+    document.body.style.background = '#0d0508';
+    document.querySelector('.bg').style.background = '';
+    admToast('🌙 Thème sombre restauré');
+  }
+}
 
 </script>
 
@@ -1575,9 +1846,25 @@ showFinal = function() {
         </div>
       </div>
       <div class="adm-section">
+        <div class="adm-label">🧩 Puzzle — Donner des pièces</div>
+        <div class="adm-row">
+          <input class="adm-in" type="number" id="adm-pieces" placeholder="Nb pièces (1-77)" min="1" max="77" style="max-width:140px">
+          <button class="adm-btn" onclick="admGivePieces()">Débloquer →</button>
+        </div>
+        <div class="adm-row" style="margin-top:6px;">
+          <button class="adm-btn sec" onclick="admGivePieces(77)">Tout débloquer</button>
+          <button class="adm-btn sec" onclick="admGoToPuzzle()">🧩 Aller au puzzle</button>
+        </div>
+      </div>
+      <div class="adm-section">
+        <div class="adm-label">🎨 Thème</div>
+        <div class="adm-row">
+          <button class="adm-btn sec" onclick="toggleBeigeTheme()">🌸 Basculer Beige/Sombre</button>
+        </div>
+      </div>
+      <div class="adm-section">
         <div class="adm-label">Raccourcis</div>
         <div class="adm-row">
-          <button class="adm-btn sec" onclick="admPuzzle()">🧩 Puzzle</button>
           <button class="adm-btn sec" onclick="admFinal()">💕 Fin</button>
           <button class="adm-btn sec" onclick="admSkip()">⏭ Passer</button>
           <button class="adm-btn red" onclick="admReset()">🔄 Reset</button>
