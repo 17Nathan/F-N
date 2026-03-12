@@ -269,7 +269,7 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
     <div id="resume-banner" style="display:none;margin-bottom:14px;background:rgba(232,160,176,.15);border:1px solid rgba(196,96,122,.25);border-radius:14px;padding:12px 18px;font-size:.9rem;color:#a03050;">
       💾 Progression sauvegardée détectée !<br>
       <button onclick="startGame()" style="margin-top:8px;background:linear-gradient(135deg,#e8829a,#f0a0b5);border:none;color:white;padding:8px 20px;border-radius:50px;cursor:pointer;font-size:.9rem;">Reprendre ▶</button>
-      <button onclick="clearSave();document.getElementById('resume-banner').style.display='none'" style="margin-top:8px;margin-left:8px;background:none;border:1px solid rgba(196,96,122,.3);color:#c4607a;padding:8px 16px;border-radius:50px;cursor:pointer;font-size:.85rem;">Recommencer</button>
+      <button onclick="startFresh()" style="margin-top:8px;margin-left:8px;background:none;border:1px solid rgba(196,96,122,.3);color:#c4607a;padding:8px 16px;border-radius:50px;cursor:pointer;font-size:.85rem;">Recommencer</button>
     </div>
     <button class="btn-start" id="btn-start-fresh" onclick="startGame()">Commencer 💕</button>
   </div>
@@ -742,7 +742,23 @@ function startGame(){
   if(hasSave){
     updateLoveGauge();
     updateUnlockedPieces();
+    updatePieceCounter();
   }
+  renderLevel();
+}
+
+function startFresh(){
+  clearSave();
+  currentLevel = 0;
+  loveScore = 0;
+  unlockedPieces = [];
+  placedPieces = {};
+  document.getElementById('resume-banner').style.display='none';
+  document.getElementById('btn-start-fresh').style.display='';
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  updateLoveGauge();
+  updatePieceCounter();
   renderLevel();
 }
 
@@ -755,6 +771,7 @@ function updateProgress(){
 }
 
 function renderLevel(){
+  _alreadyWrong = false;
   updateProgress();
   const lvl=LEVELS[currentLevel];
   const card=document.getElementById('level-card');
@@ -801,11 +818,25 @@ function renderQuiz(lvl,card){
     </div>
     <div class="hint-row"><button class="hint-btn" onclick="showHintById(this,'${hid}')">💡 Indice</button><div class="hint-txt hidden" id="ht"></div></div>`;
 }
+// _alreadyWrong: tracks if player already made a mistake on current level
+var _alreadyWrong = false;
+
 function checkQuiz(btn,correct){
   document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
   var isCorrect = (correct === true || correct === 'true');
-  if(isCorrect){btn.classList.add('correct');playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,700);}
-  else{btn.classList.add('wrong');playSound('wrong');addLoveScore(-5);setTimeout(()=>{document.querySelectorAll('.opt').forEach(b=>{b.classList.remove('wrong');b.style.opacity='';b.disabled=false;});},900);}
+  if(isCorrect){
+    btn.classList.add('correct');
+    playSound('correct');
+    if(!_alreadyWrong) addLoveScore(10);
+    spawnHearts();
+    setTimeout(nextLevel,700);
+  } else {
+    _alreadyWrong = true;
+    btn.classList.add('wrong');
+    playSound('wrong');
+    addLoveScore(-5);
+    setTimeout(()=>{document.querySelectorAll('.opt').forEach(b=>{b.classList.remove('wrong');b.style.opacity='';b.disabled=false;});},900);
+  }
 }
 
 
@@ -827,11 +858,21 @@ function renderVF(lvl,card){
 }
 function checkVF(btn,choice,answer){
   document.querySelectorAll('.vf-btn').forEach(function(b){b.disabled=true;});
-  // answer may come as string "true"/"false" from onclick attribute
   var ans = (answer === true || answer === 'true');
   var correct = (choice === ans);
-  if(correct){btn.classList.add('correct');playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,700);}
-  else{btn.classList.add('wrong');playSound('wrong');addLoveScore(-5);setTimeout(function(){document.querySelectorAll('.vf-btn').forEach(function(b){b.classList.remove('wrong');b.disabled=false;});},900);}
+  if(correct){
+    btn.classList.add('correct');
+    playSound('correct');
+    if(!_alreadyWrong) addLoveScore(10);
+    spawnHearts();
+    setTimeout(nextLevel,700);
+  } else {
+    _alreadyWrong = true;
+    btn.classList.add('wrong');
+    playSound('wrong');
+    addLoveScore(-5);
+    setTimeout(function(){document.querySelectorAll('.vf-btn').forEach(function(b){b.classList.remove('wrong');b.disabled=false;});},900);
+  }
 }
 
 
@@ -1480,7 +1521,7 @@ function renderPlaylist(lvl,card){
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
     <div class="level-type">🎵 Playlist de Nathan</div>
-    <div class="level-question">Nathan écoutait-il cette musique quand il te draguait ?</div>
+    <div class="level-question">Nathan écoutait-il cette musique le soir pendant qu'il te parlait ?</div>
     <div class="playlist-card">
       <div class="playlist-song">🎵 ${lvl.song} — ${lvl.artist}</div>
       <iframe class="playlist-yt" src="https://www.youtube.com/embed/${lvl.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -1499,11 +1540,12 @@ function checkPlaylist(btn,choice,wasListening){
   if(correct){
     btn.classList.add('correct');
     playSound('correct');
-    addLoveScore(10);
+    if(!_alreadyWrong) addLoveScore(10);
     if(fb) fb.innerHTML='<div class="fb ok">✨ '+(wl ? 'Oui il l\'écoutait ! 🎶' : 'Non, pas celle-là !')+'</div>';
     spawnHearts();
     setTimeout(nextLevel, 1500);
   } else {
+    _alreadyWrong = true;
     btn.classList.add('wrong');
     playSound('wrong');
     addLoveScore(-5);
