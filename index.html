@@ -859,8 +859,9 @@ function flipMem(c){
     if(a.dataset.e===b.dataset.e){
       a.classList.add('matched');b.classList.add('matched');
       mMatched.push(a,b);mFlipped=[];mLock=false;
-      if(mMatched.length===8){spawnHearts();setTimeout(nextLevel,600);}
+      if(mMatched.length===8){playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,600);}
     }else{
+      playSound('wrong');
       setTimeout(()=>{a.textContent='❓';b.textContent='❓';a.classList.remove('flipped');b.classList.remove('flipped');mFlipped=[];mLock=false;},850);
     }
   }
@@ -892,7 +893,7 @@ function handleClick(target){
     ct.style.transform='none';
   }
   floatHeart();
-  if(clickN>=target){spawnHearts();setTimeout(nextLevel,500);}
+  if(clickN>=target){playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,500);}
 }
 
 // ══════════════════════════════════════════
@@ -929,8 +930,9 @@ function checkOrder(ans){
   const fb=document.getElementById('of');
   if(cur.toLowerCase()===ans.toLowerCase()){
     if(fb)fb.innerHTML='<div class="fb ok">✨ Parfait !</div>';
-    spawnHearts();setTimeout(nextLevel,700);
+    playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,700);
   }else{
+    playSound('wrong');addLoveScore(-5);
     if(fb)fb.innerHTML='<div class="fb err">💭 Essaie encore...</div>';
     setTimeout(()=>{if(fb)fb.innerHTML='';},900);
   }
@@ -958,8 +960,9 @@ function checkAnagram(word){
   const fb=document.getElementById('anf');
   if(val===word.toUpperCase()||val===word.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')){
     if(fb)fb.innerHTML='<div class="fb ok">✨ Bravo !</div>';
-    spawnHearts();setTimeout(nextLevel,700);
+    playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,700);
   }else{
+    playSound('wrong');addLoveScore(-5);
     if(fb)fb.innerHTML='<div class="fb err">💭 Essaie encore...</div>';
     setTimeout(()=>{if(fb)fb.innerHTML='';},900);
   }
@@ -987,8 +990,9 @@ function checkCipher(plain){
   const fb=document.getElementById('cif');
   if(val===plain.toUpperCase()){
     if(fb)fb.innerHTML='<div class="fb ok">✨ Code déchiffré !</div>';
-    spawnHearts();setTimeout(nextLevel,700);
+    playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,700);
   }else{
+    playSound('wrong');addLoveScore(-5);
     if(fb)fb.innerHTML='<div class="fb err">💭 Essaie encore...</div>';
     setTimeout(()=>{if(fb)fb.innerHTML='';},900);
   }
@@ -1043,8 +1047,9 @@ function connectClick(el){
       leftEl.classList.remove('selected');rightEl.classList.remove('selected');
       drawConnectLine(leftEl,rightEl);
       connectMatched++;
-      if(connectMatched>=connectTotal){spawnHearts();setTimeout(nextLevel,800);}
+      if(connectMatched>=connectTotal){playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,800);}
     } else {
+      playSound('wrong');addLoveScore(-5);
       leftEl.style.borderColor='#e06060';rightEl.style.borderColor='#e06060';
       setTimeout(()=>{
         leftEl.style.borderColor='';rightEl.style.borderColor='';
@@ -1106,7 +1111,7 @@ function spawnFallingObjects(){
       if(fs)fs.textContent=`${fallCount} / ${fallTarget}`;
       floatHeart();
       obj.remove();
-      if(fallCount>=fallTarget){fallActive=false;if(fallInterval)clearInterval(fallInterval);spawnHearts();setTimeout(nextLevel,600);}
+      if(fallCount>=fallTarget){fallActive=false;if(fallInterval)clearInterval(fallInterval);playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,600);}
     }else{
       obj.style.fontSize='2rem';
       obj.style.opacity='0.3';
@@ -1311,8 +1316,9 @@ function stopSlider(target,range){
   const fb=document.getElementById('slf');
   if(sliderPos>=target-range&&sliderPos<=target+range){
     if(fb)fb.innerHTML='<div class="fb ok">✨ Parfait timing !</div>';
-    spawnHearts();setTimeout(nextLevel,700);
+    playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,700);
   }else{
+    playSound('wrong');addLoveScore(-5);
     if(fb)fb.innerHTML=`<div class="fb err">💭 Trop ${sliderPos<target-range?'tôt':'tard'} ! Réessaie.</div>`;
     setTimeout(()=>{if(fb)fb.innerHTML='';animateSlider();},1000);
   }
@@ -1363,9 +1369,11 @@ function simonClick(n){
   simonInput.push(n);
   const idx=simonInput.length-1;
   if(simonInput[idx]!==simonSeq[idx]){
+    playSound('wrong');addLoveScore(-5);
     const ss=document.getElementById('ss');if(ss)ss.textContent='❌ Recommence !';
-    simonInput=[];setTimeout(playSimon,800);
+    simonInput=[];setTimeout(playSimon,1000);
   }else if(simonInput.length===simonSeq.length){
+    playSound('correct');addLoveScore(10);
     const ss=document.getElementById('ss');if(ss)ss.textContent='✨ Parfait !';
     spawnHearts();setTimeout(nextLevel,700);
   }
@@ -1462,7 +1470,7 @@ function mazeMove(dir){
   else if(dir==='right'&&x<n-1&&!mazeData[y][x].r)nx++;
   mazePlayer={x:nx,y:ny};
   drawMaze(n);
-  if(nx===mazeGoal.x&&ny===mazeGoal.y){document.onkeydown=null;spawnHearts();setTimeout(nextLevel,700);}
+  if(nx===mazeGoal.x&&ny===mazeGoal.y){document.onkeydown=null;playSound('correct');addLoveScore(10);spawnHearts();setTimeout(nextLevel,700);}
 }
 
 // ══════════════════════════════════════════
