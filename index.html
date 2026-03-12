@@ -29,11 +29,11 @@ body{background:#fdf0eb;color:#2a1020;font-family:'Lato',sans-serif;min-height:1
 #intro{text-align:center;animation:fadeIn 1.5s ease;}
 .intro-emoji{font-size:4rem;animation:heartbeat 1.5s ease-in-out infinite;display:block;margin-bottom:20px;}
 @keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.25);}}
-.intro-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,7vw,4rem);font-style:italic;background:linear-gradient(135deg,var(--rose),var(--gold),var(--rose-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px;}
-.intro-sub{font-size:1.1rem;color:rgba(42,16,32,.65);font-style:italic;margin-bottom:10px;letter-spacing:.04em;}
-.intro-days{font-size:.9rem;color:var(--gold);letter-spacing:.12em;margin-bottom:35px;}
-.btn-start{background:linear-gradient(135deg,var(--rose-dark),var(--gold));border:none;color:white;padding:16px 50px;font-size:1.15rem;font-family:'Playfair Display',serif;border-radius:50px;cursor:pointer;letter-spacing:.08em;box-shadow:0 0 30px rgba(232,160,176,.4);transition:all .3s;}
-.btn-start:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(232,160,176,.6);}
+.intro-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,7vw,4rem);font-style:italic;background:linear-gradient(135deg,#e8829a,#f0a0b5,#c4607a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px;}
+.intro-sub{font-size:1.1rem;color:#e8829a;font-style:italic;margin-bottom:10px;letter-spacing:.04em;}
+.intro-days{font-size:.9rem;color:#e8829a;letter-spacing:.12em;margin-bottom:35px;}
+.btn-start{background:linear-gradient(135deg,#e8829a,#f0a0b5,#e8829a);border:none;color:white;padding:16px 50px;font-size:1.15rem;font-family:'Playfair Display',serif;border-radius:50px;cursor:pointer;letter-spacing:.08em;box-shadow:0 4px 20px rgba(196,96,122,.35);transition:all .3s;text-shadow:0 1px 3px rgba(0,0,0,.15);}
+.btn-start:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(196,96,122,.5);}
 
 /* PROGRESS */
 .progress-wrap{width:100%;margin-bottom:25px;}
@@ -656,15 +656,16 @@ function checkQuiz(btn,correct){
 //  VRAI / FAUX
 // ══════════════════════════════════════════
 function renderVF(lvl,card){
-  card.innerHTML='<div class="level-badge">💌 Niveau '+(currentLevel+1)+'</div>'
-    +'<div class="level-type">Vrai ou Faux ✅</div>'
-    +'<div class="level-question">'+lvl.q+'</div>'
-    +'<div class="vf-btns">'
-    +'<button class="vf-btn vrai" onclick="checkVF(this,true,'+lvl.a+')">✅ Vrai</button>'
-    +'<button class="vf-btn faux" onclick="checkVF(this,false,'+lvl.a+')">❌ Faux</button>'
-    +'</div>'
-    +'<div id="vff"></div>'
-    +'<div class="hint-row"><button class="hint-btn" onclick="showHint(this,''+lvl.h+'')">💡 Indice</button><div class="hint-txt hidden" id="ht"></div></div>';
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Vrai ou Faux ✅</div>
+    <div class="level-question">${lvl.q}</div>
+    <div class="vf-btns">
+      <button class="vf-btn vrai" onclick="checkVF(this,true,${lvl.a})">✅ Vrai</button>
+      <button class="vf-btn faux" onclick="checkVF(this,false,${lvl.a})">❌ Faux</button>
+    </div>
+    <div id="vff"></div>
+    <div class="hint-row"><button class="hint-btn" onclick="showHint(this,'${lvl.h}')">💡 Indice</button><div class="hint-txt hidden" id="ht"></div></div>`;
 }
 function checkVF(btn,choice,answer){
   document.querySelectorAll('.vf-btn').forEach(function(b){b.disabled=true;});
@@ -1612,7 +1613,8 @@ function admGoToPuzzle(){
 }
 
 function admPuzzle(){ admGoToPuzzle(); }
-  var url = (document.getElementById('adm-url').value || '').trim();
+
+function admPhotoUrl() {
   if (!url) return;
   admPhoto = url;
   admApplyPhoto(url);
