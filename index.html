@@ -60,7 +60,7 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
 .input-row{display:flex;gap:9px;flex-wrap:wrap;}
 .txt-in{flex:1;min-width:180px;background:rgba(255,255,255,.7);border:1px solid rgba(232,160,176,.28);color:var(--cream);padding:13px 17px;border-radius:13px;font-size:.95rem;font-family:'Lato',sans-serif;outline:none;transition:border-color .3s;}
 .txt-in:focus{border-color:var(--rose);}
-.btn-v{background:linear-gradient(135deg,var(--rose-dark),var(--gold));border:none;color:white;padding:13px 22px;border-radius:13px;cursor:pointer;font-family:'Playfair Display',serif;font-size:.95rem;transition:all .25s;white-space:nowrap;}
+.btn-v{background:linear-gradient(135deg,#e8829a,#f0a0b5);border:none;color:white;padding:13px 22px;border-radius:13px;cursor:pointer;font-family:'Playfair Display',serif;font-size:.95rem;transition:all .25s;white-space:nowrap;}
 .btn-v:hover{transform:scale(1.05);}
 
 /* MEMORY */
@@ -236,19 +236,19 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
 .adm-section:last-child{border-bottom:none;}
 .adm-label{font-size:.72rem;letter-spacing:.18em;color:#d4a843;text-transform:uppercase;margin-bottom:10px;}
 .adm-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;align-items:center;}
-.adm-in{flex:1;min-width:100px;background:rgba(255,255,255,.6);border:1px solid rgba(232,160,176,.25);color:#fdf6ee;padding:9px 13px;border-radius:9px;font-size:.9rem;outline:none;font-family:'Lato',sans-serif;}
+.adm-in{flex:1;min-width:100px;background:rgba(255,255,255,.8);border:1px solid rgba(196,96,122,.25);color:#2a1020;padding:9px 13px;border-radius:9px;font-size:.9rem;outline:none;font-family:'Lato',sans-serif;}
 .adm-in:focus{border-color:#e8a0b0;}
 .adm-btn{background:linear-gradient(135deg,#c4607a,#d4a843);border:none;color:white;padding:9px 16px;border-radius:9px;cursor:pointer;font-size:.85rem;white-space:nowrap;}
 .adm-btn:hover{opacity:.85;}
-.adm-btn.sec{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);color:#fdf6ee;}
+.adm-btn.sec{background:rgba(232,160,176,.12);border:1px solid rgba(196,96,122,.2);color:#a03050;}
 .adm-btn.sec:hover{border-color:#e8a0b0;}
 .adm-btn.red{background:rgba(180,60,60,.4);border:1px solid rgba(180,60,60,.5);color:#f0a0a0;}
 .adm-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px;}
-.adm-tab{padding:6px 14px;border:1px solid rgba(232,160,176,.2);border-radius:50px;cursor:pointer;font-size:.78rem;color:rgba(42,16,32,.45);transition:all .2s;}
-.adm-tab.on{border-color:#d4a843;color:#d4a843;background:rgba(212,168,67,.1);}
+.adm-tab{padding:6px 14px;border:1px solid rgba(196,96,122,.2);border-radius:50px;cursor:pointer;font-size:.78rem;color:rgba(42,16,32,.5);transition:all .2s;}
+.adm-tab.on{border-color:#e8829a;color:#c4607a;background:rgba(232,160,176,.15);}
 .adm-tc{display:none;}
 .adm-tc.on{display:block;}
-.adm-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a0a10;border:1px solid #d4a843;color:#fdf6ee;padding:10px 22px;border-radius:50px;font-size:.88rem;z-index:99999;pointer-events:none;animation:toastPop .3s ease;}
+.adm-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#fff0f5;border:1px solid #e8829a;color:#a03050;padding:10px 22px;border-radius:50px;font-size:.88rem;z-index:99999;pointer-events:none;animation:toastPop .3s ease;}
 @keyframes toastPop{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 .adm-img-prev{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,168,67,.4);display:none;margin-top:8px;}
 .hidden{display:none!important;}
@@ -264,11 +264,16 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
     <h1 class="intro-title">L'Aventure de Félicia</h1>
     <p class="intro-sub">Une surprise de Nathan, rien que pour toi...</p>
     <p class="intro-days">✨ 775 défis • plusieurs jours d'aventure ✨</p>
-    <button class="btn-start" onclick="startGame()">Commencer 💕</button>
+    <div id="resume-banner" style="display:none;margin-bottom:14px;background:rgba(232,160,176,.15);border:1px solid rgba(196,96,122,.25);border-radius:14px;padding:12px 18px;font-size:.9rem;color:#a03050;">
+      💾 Progression sauvegardée détectée !<br>
+      <button onclick="startGame()" style="margin-top:8px;background:linear-gradient(135deg,#e8829a,#f0a0b5);border:none;color:white;padding:8px 20px;border-radius:50px;cursor:pointer;font-size:.9rem;">Reprendre ▶</button>
+      <button onclick="clearSave();document.getElementById('resume-banner').style.display='none'" style="margin-top:8px;margin-left:8px;background:none;border:1px solid rgba(196,96,122,.3);color:#c4607a;padding:8px 16px;border-radius:50px;cursor:pointer;font-size:.85rem;">Recommencer</button>
+    </div>
+    <button class="btn-start" id="btn-start-fresh" onclick="startGame()">Commencer 💕</button>
   </div>
 
   <div id="game" class="hidden" style="width:100%">
-    <div class="day-badge" id="day-badge">JOUR 1</div>
+    <div class="day-badge" id="day-badge" style="display:none"></div>
     <div class="progress-wrap">
       <div class="progress-info">
         <span id="prog-left">Félicia</span>
@@ -292,7 +297,7 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
       <!-- Zone de destination (puzzle à reconstituer) -->
       <div>
         <p style="font-size:.7rem;letter-spacing:.15em;color:var(--rose);text-transform:uppercase;text-align:center;margin-bottom:6px;">🖼️ Place les pièces ici</p>
-        <div id="puzzle-board" style="display:grid;grid-template-columns:repeat(7,44px);grid-template-rows:repeat(11,44px);gap:2px;background:rgba(0,0,0,.4);border:2px solid rgba(212,168,67,.3);border-radius:12px;padding:4px;position:relative;"></div>
+        <div id="puzzle-board" style="display:grid;grid-template-columns:repeat(7,44px);grid-template-rows:repeat(11,44px);gap:2px;background:rgba(232,160,176,.08);border:2px solid rgba(196,96,122,.2);border-radius:12px;padding:4px;position:relative;"></div>
       </div>
       <!-- Pièces débloquées à placer -->
       <div style="max-width:160px;">
@@ -339,29 +344,61 @@ var LEVELS_PER_PIECE = Math.floor(TOTAL / PUZZLE_TOTAL);
 
 // ── LOVE SCORE ──
 let loveScore = 0;
-var MAX_LOVE = 775 * 10;
+var MAX_LOVE = TOTAL * 10;
+
 function addLoveScore(pts){
   loveScore = Math.max(0, loveScore + pts);
+  saveProgress();
   updateLoveGauge();
-  // show floating +/- indicator
   const pop = document.createElement('div');
   pop.className = 'love-score-pop';
   pop.textContent = pts > 0 ? '+'+pts+' 💕' : pts+' 💔';
-  pop.style.color = pts > 0 ? '#a8f0b0' : '#f0a0a0';
+  pop.style.color = pts > 0 ? '#c4607a' : '#e06060';
   pop.style.left = (30+Math.random()*40)+'vw';
-  pop.style.top = '30vh';
+  pop.style.top = '40vh';
   document.body.appendChild(pop);
   setTimeout(()=>pop.remove(), 1200);
 }
 function updateLoveGauge(){
-  const pct = Math.min(100, Math.max(0, (loveScore / (TOTAL*5))*100));
+  const pct = Math.min(100, Math.max(0, (loveScore / MAX_LOVE)*100));
   const fill = document.getElementById('love-gauge-fill');
   const txt = document.getElementById('love-score-txt');
   if(fill) fill.style.width = pct+'%';
   if(txt){
-    let label = loveScore < 100 ? '😢' : loveScore < 500 ? '🥺' : loveScore < 1500 ? '🥰' : loveScore < 3000 ? '💕' : '💖 Trop d\'amour !';
+    let label = loveScore < 100 ? '😢' : loveScore < 500 ? '🥺' : loveScore < 1500 ? '🥰' : loveScore < 3000 ? '💕' : '💖';
     txt.textContent = loveScore+' pts '+label;
   }
+}
+
+// ── SAVE / LOAD (localStorage) ──
+const SAVE_KEY = 'felicia_aventure_save';
+function saveProgress(){
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      level: currentLevel,
+      score: loveScore,
+      unlocked: unlockedPieces,
+      placed: placedPieces
+    }));
+  } catch(e){}
+}
+function loadProgress(){
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    if(data.level > 0){
+      currentLevel = data.level || 0;
+      loveScore = data.score || 0;
+      unlockedPieces = data.unlocked || [];
+      placedPieces = data.placed || {};
+      return true;
+    }
+  } catch(e){}
+  return false;
+}
+function clearSave(){
+  try { localStorage.removeItem(SAVE_KEY); } catch(e){}
 }
 
 // ══════════════════════════════════════════
@@ -379,24 +416,24 @@ function buildLevels() {
     {q:"Quelle est la plus belle qualité de Félicia ?",opts:["Son sourire","Sa gentillesse","Son intelligence","Tout d'elle"],a:3,h:"Impossible de choisir une seule"},
     {q:"Combien de messages vous vous envoyez par jour ?",opts:["Moins de 50","50-100","100-200","+200"],a:3,h:"Beaucoup... vraiment beaucoup"},
     {q:"Quel est le premier cadeau que Nathan a offert à Félicia ?",opts:["Un bijou","Un bouquet fait maison","Une lettre","Un cadre photo"],a:1,h:"Fait avec les mains et le cœur"},
-    {q:"Quel est le rêve de Nathan pour leur futur ?",opts:["Voyager ensemble","Vivre ensemble","Se marier","Rendre Félicia heureuse"],a:3,h:"Ce qui compte c'est elle"},
+    {q:"Quel est notre rêve pour notre futur ?",opts:["Voyager ensemble","Vivre ensemble","Se marier","Rendre Félicia heureuse"],a:3,h:"Ce qui compte c'est elle"},
     {q:"Ce qui manque le plus à Nathan ?",opts:["Sa voix","Son sourire","Sa présence","Tout d'elle"],a:2,h:"Le plus simple et le plus précieux"},
-    {q:"Quelle a été la première série qu'ils ont regardée ensemble ?",opts:["Dexter","Breaking Bad","Ed Gein Monster","Squid Game"],a:2,h:"Un true crime qui les a rapprochés"},
+    {q:"Quelle a été la première série qu'on a regardée ensemble ?",opts:["Dexter","Breaking Bad","Ed Gein Monster","Squid Game"],a:2,h:"Un true crime qui les a rapprochés"},
     {q:"Dans quelle saison vous vous êtes rencontrés ?",opts:["Printemps","Été","Automne","Hiver"],a:1,h:"Il faisait chaud"},
     {q:"Où Nathan veut aller en vacances cet été ?",opts:["Bali","Maldives","Philippines","Japon"],a:2,h:"Un archipel magnifique en Asie"},
-    {q:"Comment Nathan décrit leur amour ?",opts:["Unique","Magique","Infini","La plus belle chose qui lui soit arrivée"],a:3,h:"Les mots ne suffisent pas"},
+    {q:"Comment Nathan décrit notre amour ?",opts:["Unique","Magique","Infini","La plus belle chose qui lui soit arrivée"],a:3,h:"Les mots ne suffisent pas"},
     {q:"Ce que fait Félicia qui fait fondre Nathan ?",opts:["Son rire","Ses yeux","Sa façon de parler","Tout ce qu'elle fait"],a:3,h:"Tout, sans exception"},
     {q:"Quelle promesse Nathan a-t-il faite à Félicia ?",opts:["Être là toujours","Ne jamais la lâcher","Aimer toujours","Tout ça"],a:1,h:"Il ne la lâchera jamais"},
-    {q:"Combien de pays rêvent-ils de visiter ensemble ?",opts:["1-2","3-5","6-10","Le plus possible"],a:3,h:"Le monde entier les attend"},
+    {q:"Combien de pays rêvons-nous de visiter ensemble ?",opts:["1-2","3-5","6-10","Le plus possible"],a:3,h:"Le monde entier les attend"},
     {q:"Que ressent Nathan quand tu es triste ?",opts:["Il est impuissant","Il veut tout faire","Ça lui déchire le cœur","Tout ça"],a:2,h:"L'amour c'est aussi ça"},
     {q:"Première chose que Nathan fait le matin ?",opts:["Se lever","Manger","Écrire un message d'amour à Félicia","Regarder son téléphone"],a:2,h:"Elle est sa première pensée"},
     {q:"Comment Nathan décrit Félicia en un mot ?",opts:["Belle","Parfaite","Lumineuse","C'est une bénédiction"],a:3,h:"Plus qu'un simple mot"},
     {q:"Leur plus grande force dans la relation ?",opts:["La confiance","L'humour","La distance surmontée","Leur amour"],a:3,h:"Ce qui les tient ensemble"},
-    {q:"Moment préféré de leur journée ?",opts:["Les messages du matin","Les appels FaceTime","Quand ils s'appellent","Les messages du soir"],a:2,h:"La voix de l'autre"},
+    {q:"Notre moment préféré de la journée ?",opts:["Les messages du matin","Les appels FaceTime","Quand ils s'appellent","Les messages du soir"],a:2,h:"La voix de l'autre"},
     {q:"Quelle musique met Nathan de bonne humeur ?",opts:["Baby - Bieber","Has To Be You - Thiago Sub","Afro beat","Rock"],a:1,h:"Une chanson qui parle d'eux"},
-    {q:"Que ferait Nathan si tu pleurais ?",opts:["Écouter","Consoler","Te réconforter","Tout ça"],a:2,h:"Il serait là pour toi"},
+    {q:"Que ferait Nathan si tu pleurais ?",opts:["Écouter","Consoler","Te réconforter","Tout ça"],a:2,h:"Il serait là, toujours"},
     {q:"Premier mot de Nathan quand il verra Félicia ?",opts:["Enfin","Magnifique","Mon amour","Parfaite"],a:2,h:"Les mots qui viennent du cœur"},
-    {q:"Dans combien de temps se reverront-ils ?",opts:["Dans quelques mois","Dans un an","Moins d'un mois","On ne sait pas"],a:2,h:"Très bientôt..."},
+    {q:"Dans combien de temps on se revoit ?",opts:["Dans quelques mois","Dans un an","Moins d'un mois","On ne sait pas"],a:2,h:"Très bientôt..."},
   ];
 
 
@@ -471,7 +508,7 @@ function buildLevels() {
 
   const vfPool = [
     {q:"Nathan pense à toi tous les jours.",a:true,h:"Absolument, sans exception !"},
-    {q:"La distance a arrêté leur amour.",a:false,h:"Jamais, et ça ne changera pas"},
+    {q:"La distance a arrêté notre amour.",a:false,h:"Jamais, et ça ne changera pas"},
     {q:"Nathan et toi vous vous êtes rencontrés sur un jeu vidéo.",a:true,h:"Le début de tout"},
     {q:"Tu es la personne la plus précieuse pour Nathan.",a:true,h:"Sans aucun doute"},
     {q:"Nathan regrette d'avoir rencontré Félicia.",a:false,h:"Jamais de la vie"},
@@ -596,8 +633,13 @@ var LEVELS = buildLevels();
 //  START
 // ══════════════════════════════════════════
 function startGame(){
+  const hasSave = loadProgress();
   document.getElementById('intro').classList.add('hidden');
   document.getElementById('game').classList.remove('hidden');
+  if(hasSave){
+    updateLoveGauge();
+    updateUnlockedPieces();
+  }
   renderLevel();
 }
 
@@ -962,6 +1004,9 @@ function spawnFallingObjects(){
     }else{
       obj.style.fontSize='2rem';
       obj.style.opacity='0.3';
+      fallCount = Math.max(0, fallCount - 1);
+      const fs=document.getElementById('fs');
+      if(fs)fs.textContent=fallCount+' / '+fallTarget;
       setTimeout(()=>obj.remove(),400);
     }
   };
@@ -981,7 +1026,7 @@ function renderPiano(lvl,card){
     <div class="level-type">Mélodie 🎵</div>
     <div class="level-question">Mémorise et répète la séquence !</div>
     <div class="piano-wrap">
-      <div class="piano-seq" id="ps">${pianoSeq.map((e,i)=>`<div class="piano-note" id="pn${i}">${e}</div>`).join('')}</div>
+      <div class="piano-seq" id="ps" style="visibility:hidden">${pianoSeq.map((e,i)=>`<div class="piano-note" id="pn${i}">${e}</div>`).join('')}</div>
       <div class="piano-keys" id="pk">
         ${lvl.pool.map(e=>`<div class="piano-key" onclick="pianoHit('${e}')">${e}</div>`).join('')}
       </div>
@@ -996,7 +1041,7 @@ function showPianoSequence(){
   const interval=setInterval(()=>{
     document.querySelectorAll('.piano-note').forEach(n=>n.classList.remove('active'));
     if(i<pianoSeq.length){document.getElementById('pn'+i)?.classList.add('active');i++;}
-    else{clearInterval(interval);document.querySelectorAll('.piano-note').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.piano-key').forEach(k=>k.style.pointerEvents='');pianoShowing=false;}
+    else{clearInterval(interval);document.querySelectorAll('.piano-note').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.piano-key').forEach(k=>k.style.pointerEvents='');pianoShowing=false;const ps=document.getElementById('ps');if(ps)ps.style.visibility='hidden';}
   },700);
 }
 function pianoHit(emoji){
@@ -1262,6 +1307,7 @@ function nextLevel(){
   document.onkeydown=null;
   currentLevel++;
   updateUnlockedPieces();
+  saveProgress();
   if(currentLevel>=TOTAL){
     document.getElementById('game').classList.add('hidden');
     window._admBypass = true;
@@ -1593,6 +1639,10 @@ function admReset() {
   }
   admResetConfirm = false;
   currentLevel = 0;
+  loveScore = 0;
+  unlockedPieces = [];
+  placedPieces = {};
+  clearSave();
   document.getElementById('final-screen').classList.add('hidden');
   document.getElementById('puzzle-screen').classList.add('hidden');
   document.getElementById('game').classList.add('hidden');
@@ -1716,8 +1766,21 @@ showFinal = function() {
   setTimeout(spawnConfetti, 2000);
 };
 
-// ══════════════════════════════════════════
-//  SECRET ACCESS: 7 taps bas-gauche → code 75757575
+// Check for save on load
+(function(){
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(raw){
+      const data = JSON.parse(raw);
+      if(data && data.level > 0){
+        const banner = document.getElementById('resume-banner');
+        const btnFresh = document.getElementById('btn-start-fresh');
+        if(banner) banner.style.display='block';
+        if(btnFresh) btnFresh.style.display='none';
+      }
+    }
+  } catch(e){}
+})();
 // ══════════════════════════════════════════
 (function(){
   var tapCount = 0;
