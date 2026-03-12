@@ -397,34 +397,41 @@ function playSound(type){
   } catch(e){}
 }
 
-// Piano note frequencies (mapped to emojis)
-var PIANO_NOTES = {
-  '🎵': 261.63, // C4
-  '🎶': 293.66, // D4
-  '🎸': 329.63, // E4
-  '🎹': 349.23, // F4
-  '🎺': 392.00, // G4
-  '🎻': 440.00, // A4
-  '🥁': 493.88, // B4
-  '🪗': 523.25  // C5
-};
+// Instruments avec sons distincts (oscillateur + forme d'onde différente par instrument)
+var INSTRUMENTS = [
+  { emoji:'🎹', name:'Piano',    freq:261.63, type:'triangle',  attack:0.01, decay:0.6,  color:'#a8d8ea' },
+  { emoji:'🎸', name:'Guitare',  freq:196.00, type:'sawtooth',  attack:0.01, decay:0.5,  color:'#f9a26c' },
+  { emoji:'🎺', name:'Trompette',freq:392.00, type:'square',    attack:0.02, decay:0.35, color:'#ffd166' },
+  { emoji:'🎻', name:'Violon',   freq:440.00, type:'sawtooth',  attack:0.08, decay:0.7,  color:'#c9b1bd' },
+  { emoji:'🥁', name:'Batterie', freq:80.00,  type:'triangle',  attack:0.001,decay:0.25, color:'#b8b8ff' },
+  { emoji:'🪗', name:'Accordéon',freq:349.23, type:'square',    attack:0.05, decay:0.55, color:'#caffbf' },
+];
+var INSTR_MAP = {};
+INSTRUMENTS.forEach(function(inst){ INSTR_MAP[inst.emoji] = inst; });
 
-function playPianoNote(emoji, duration){
+function playInstrumentNote(emoji, duration){
   try {
     var ctx = getAudioCtx();
-    var freq = PIANO_NOTES[emoji] || 440;
+    var inst = INSTR_MAP[emoji];
+    if(!inst) return;
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
     osc.connect(gain);
     gain.connect(ctx.destination);
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (duration || 0.4));
+    osc.type = inst.type;
+    osc.frequency.setValueAtTime(inst.freq, ctx.currentTime);
+    // Batterie: pitch drop
+    if(emoji === '🥁') osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.001, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + inst.attack);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (duration || inst.decay));
     osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + (duration || 0.4));
+    osc.stop(ctx.currentTime + (duration || inst.decay) + 0.05);
   } catch(e){}
 }
+
+// kept for backward compat
+function playPianoNote(emoji, duration){ playInstrumentNote(emoji, duration); }
 
 // ══════════════════════════════════════════
 //  GAME STATE & CONSTANTS (all declared first)
@@ -681,10 +688,10 @@ function buildLevels() {
   }
   function nextFall(){ return{type:'fall',target:12+Math.floor(Math.random()*8),good:'💕',bad:'💔'}; }
   function nextPiano(){ 
-    const emojis=['🎵','🎶','🎸','🎹','🎺','🎻','🥁','🪗'];
+    const pool=['🎹','🎸','🎺','🎻','🥁','🪗'];
     const len=3+Math.floor(Math.random()*3);
-    const seq=Array.from({length:len},()=>emojis[Math.floor(Math.random()*5)]);
-    return{type:'piano',seq,pool:emojis.slice(0,6)};
+    const seq=Array.from({length:len},()=>pool[Math.floor(Math.random()*pool.length)]);
+    return{type:'piano',seq,pool};
   }
   function nextSlider(){ const target=20+Math.floor(Math.random()*60);return{type:'slider',target,range:10}; }
   function nextSimon(){ const len=3+Math.floor(si/15);return{type:'simon',len}; }
@@ -1120,133 +1127,146 @@ function spawnFallingObjects(){
 let pianoSeq=[],pianoProgress=0,pianoShowing=false;
 function renderPiano(lvl,card){
   pianoSeq=lvl.seq; pianoProgress=0; pianoShowing=false;
-  // Map emojis to note labels for display
-  const noteLabels = {'🎵':'Do','🎶':'Ré','🎸':'Mi','🎹':'Fa','🎺':'Sol','🎻':'La','🥁':'Si','🪗':'Do²'};
-  const noteColors = {'🎵':'#f5a0b5','🎶':'#f0b090','🎸':'#d4c840','🎹':'#90c060','🎺':'#60c0c0','🎻':'#6090e0','🥁':'#9060c0','🪗':'#c060a0'};
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
     <div class="level-type">Mélodie 🎵</div>
-    <div class="level-question">Écoute la mélodie, puis rejoue-la !</div>
+    <div class="level-question">Écoute bien... puis répète dans le même ordre !</div>
     <div class="piano-wrap">
-      <!-- Simon-style sequence display -->
-      <div id="ps" style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">
-        ${pianoSeq.map((e,i)=>`
-          <div id="pn${i}" style="
-            width:38px;height:38px;border-radius:50%;
-            background:${noteColors[e]||'#e8a0b0'}22;
-            border:2px solid ${noteColors[e]||'#e8a0b0'}66;
-            display:flex;align-items:center;justify-content:center;
-            font-size:.7rem;color:#a03050;font-weight:600;
-            transition:all .15s;
-          ">${noteLabels[e]||e}</div>`).join('')}
-      </div>
-      <!-- Progress dots -->
-      <div style="display:flex;gap:4px;justify-content:center;margin-bottom:10px;">
-        ${pianoSeq.map((e,i)=>`<div id="pd${i}" style="width:8px;height:8px;border-radius:50%;background:rgba(196,96,122,.2);transition:background .2s;"></div>`).join('')}
+      <!-- Progress dots only — NO note names shown -->
+      <div id="piano-dots" style="display:flex;gap:5px;justify-content:center;margin-bottom:14px;">
+        ${pianoSeq.map((_,i)=>`<div id="pd${i}" style="width:10px;height:10px;border-radius:50%;background:rgba(196,96,122,.18);transition:background .2s;"></div>`).join('')}
       </div>
       <button id="piano-replay" onclick="showPianoSequence()" style="
-        margin:0 auto 12px;display:block;
-        background:linear-gradient(135deg,rgba(232,160,176,.15),rgba(232,160,176,.25));
-        border:1px solid rgba(196,96,122,.3);color:#c4607a;
-        padding:7px 20px;border-radius:50px;cursor:pointer;font-size:.85rem;
-        pointer-events:none;opacity:.4;transition:opacity .3s;">
-        🔁 Réécouter
-      </button>
-      <!-- Piano keys -->
-      <div class="piano-keys" id="pk" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">
-        ${lvl.pool.map(e=>`
-          <div class="piano-key" onclick="pianoHit('${e}')" style="
-            background:${noteColors[e]||'#f5e0e8'};
-            border:none;border-radius:10px;
-            width:52px;height:52px;
+        margin:0 auto 14px;display:block;
+        background:rgba(232,160,176,.15);border:1px solid rgba(196,96,122,.3);
+        color:#c4607a;padding:7px 22px;border-radius:50px;cursor:pointer;font-size:.85rem;
+        pointer-events:none;opacity:.4;transition:opacity .3s;">🔁 Réécouter</button>
+      <!-- Instrument buttons — these are BOTH the demo display AND the input -->
+      <div id="pk" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+        ${lvl.pool.map(inst=>{
+          const d = INSTR_MAP[inst];
+          return `<div id="ikey-${inst}" class="piano-key" onclick="pianoHit('${inst}')" style="
+            background:${d?d.color:'#f5e0e8'};
+            border:3px solid transparent;
+            border-radius:14px;width:70px;height:70px;
             display:flex;flex-direction:column;align-items:center;justify-content:center;
-            cursor:pointer;transition:all .15s;
-            box-shadow:0 3px 0 rgba(0,0,0,.15);
-            font-size:1.1rem;gap:2px;
+            cursor:pointer;transition:all .18s;
+            box-shadow:0 4px 0 rgba(0,0,0,.15);
+            gap:3px;user-select:none;
           ">
-            <span>${e}</span>
-            <span style="font-size:.55rem;color:rgba(0,0,0,.5);font-weight:600;">${noteLabels[e]||''}</span>
-          </div>`).join('')}
+            <span style="font-size:1.6rem;">${inst}</span>
+            <span style="font-size:.6rem;color:rgba(0,0,0,.55);font-weight:600;">${d?d.name:inst}</span>
+          </div>`;
+        }).join('')}
       </div>
+      <div id="piano-msg" style="text-align:center;margin-top:10px;font-size:.85rem;color:#c4607a;min-height:20px;"></div>
     </div>
     <div id="pf"></div>`;
-  setTimeout(showPianoSequence, 400);
+  setTimeout(showPianoSequence, 500);
 }
 
 function showPianoSequence(){
   pianoShowing=true;
   pianoProgress=0;
   const replayBtn = document.getElementById('piano-replay');
+  const msg = document.getElementById('piano-msg');
   if(replayBtn){ replayBtn.style.pointerEvents='none'; replayBtn.style.opacity='.4'; }
-  document.querySelectorAll('.piano-key').forEach(k=>k.style.pointerEvents='none');
-  // Reset all note displays
-  pianoSeq.forEach((_,i)=>{
-    const n = document.getElementById('pn'+i);
-    if(n){ n.style.transform='scale(1)'; n.style.boxShadow='none'; n.style.opacity='1'; }
-    const d = document.getElementById('pd'+i);
-    if(d) d.style.background='rgba(196,96,122,.2)';
+  if(msg) msg.textContent = '👂 Écoute...';
+  // Disable all keys during demo
+  document.querySelectorAll('.piano-key').forEach(k=>{
+    k.style.pointerEvents='none';
+    k.style.border='3px solid transparent';
+    k.style.boxShadow='0 4px 0 rgba(0,0,0,.15)';
+    k.style.transform='';
   });
+  // Reset dots
+  pianoSeq.forEach((_,i)=>{ const d=document.getElementById('pd'+i); if(d) d.style.background='rgba(196,96,122,.18)'; });
 
   let i=0;
   function playNext(){
+    // Turn off previous
     if(i > 0){
-      const prev = document.getElementById('pn'+(i-1));
-      if(prev){ prev.style.transform='scale(1)'; prev.style.boxShadow='none'; }
+      const prevKey = document.getElementById('ikey-'+pianoSeq[i-1]);
+      if(prevKey){
+        const inst = INSTR_MAP[pianoSeq[i-1]];
+        prevKey.style.border='3px solid transparent';
+        prevKey.style.boxShadow='0 4px 0 rgba(0,0,0,.15)';
+        prevKey.style.transform='';
+        prevKey.style.background = inst ? inst.color : '#f5e0e8';
+      }
     }
     if(i < pianoSeq.length){
-      const note = document.getElementById('pn'+i);
-      if(note){
-        note.style.transform='scale(1.3)';
-        note.style.boxShadow='0 0 16px rgba(196,96,122,.5)';
-        note.style.opacity='1';
+      const emoji = pianoSeq[i];
+      const inst = INSTR_MAP[emoji];
+      const key = document.getElementById('ikey-'+emoji);
+      if(key){
+        // Light up green like Simon
+        key.style.border='3px solid #4caf50';
+        key.style.boxShadow='0 0 20px rgba(76,175,80,.6), 0 4px 0 rgba(0,0,0,.1)';
+        key.style.transform='scale(1.08)';
+        key.style.background = inst ? lightenColor(inst.color) : '#c8f5c8';
       }
-      playPianoNote(pianoSeq[i], 0.45);
+      playInstrumentNote(emoji, 0.5);
       i++;
-      setTimeout(playNext, 600);
+      setTimeout(playNext, 700);
     } else {
-      // Done showing
+      // Sequence done — enable input
       setTimeout(()=>{
         pianoShowing=false;
         document.querySelectorAll('.piano-key').forEach(k=>k.style.pointerEvents='');
         if(replayBtn){ replayBtn.style.pointerEvents=''; replayBtn.style.opacity='1'; }
+        if(msg) msg.textContent = '🎵 À toi !';
       }, 300);
     }
   }
   playNext();
 }
 
+function lightenColor(hex){
+  // Simple lighten for Simon glow effect
+  return hex.replace(/([0-9a-f]{2})/gi, function(m){ return Math.min(255,parseInt(m,16)+60).toString(16).padStart(2,'0'); });
+}
+
 function pianoHit(emoji){
   if(pianoShowing) return;
-  // Play the note sound
-  playPianoNote(emoji, 0.35);
-  // Animate the key
-  const keys=[...document.querySelectorAll('.piano-key')];
-  const hitKey=keys.find(k=>k.dataset && k.textContent.includes(emoji) || k.querySelector('span')?.textContent===emoji);
-  // Find by onclick attr content
-  const allKeys = document.querySelectorAll('.piano-key');
-  allKeys.forEach(k=>{ if(k.getAttribute('onclick')&&k.getAttribute('onclick').includes("'"+emoji+"'")){ k.style.transform='scale(.92)'; setTimeout(()=>k.style.transform='',150); }});
+  // Play sound
+  playInstrumentNote(emoji, 0.35);
+  // Press animation
+  const key = document.getElementById('ikey-'+emoji);
+  if(key){ key.style.transform='scale(.92)'; setTimeout(()=>key.style.transform='',150); }
 
   const expected=pianoSeq[pianoProgress];
   if(emoji===expected){
-    // Light up the dot
+    // Green flash on correct key
+    if(key){
+      key.style.border='3px solid #4caf50';
+      key.style.boxShadow='0 0 16px rgba(76,175,80,.5)';
+      setTimeout(()=>{ key.style.border='3px solid transparent'; key.style.boxShadow='0 4px 0 rgba(0,0,0,.15)'; },350);
+    }
     const dot = document.getElementById('pd'+pianoProgress);
     if(dot) dot.style.background='#e8829a';
-    const noteEl = document.getElementById('pn'+pianoProgress);
-    if(noteEl){ noteEl.style.boxShadow='0 0 12px rgba(232,160,176,.7)'; noteEl.style.transform='scale(1.15)'; setTimeout(()=>{ noteEl.style.transform='scale(1)'; noteEl.style.boxShadow='none'; },300); }
     pianoProgress++;
     if(pianoProgress>=pianoSeq.length){
       playSound('correct');
       addLoveScore(10);
       spawnHearts();
-      setTimeout(nextLevel,700);
+      const msg=document.getElementById('piano-msg');
+      if(msg) msg.textContent='✨ Parfait !';
+      setTimeout(nextLevel,800);
     }
   } else {
+    // Red flash on wrong key
+    if(key){
+      key.style.border='3px solid #e06060';
+      key.style.boxShadow='0 0 16px rgba(224,96,96,.5)';
+      setTimeout(()=>{ key.style.border='3px solid transparent'; key.style.boxShadow='0 4px 0 rgba(0,0,0,.15)'; },400);
+    }
     playSound('wrong');
     addLoveScore(-5);
     pianoProgress=0;
-    pianoSeq.forEach((_,i)=>{ const d=document.getElementById('pd'+i); if(d) d.style.background='rgba(196,96,122,.2)'; });
-    const pf=document.getElementById('pf');
-    if(pf){pf.innerHTML='<div class="fb err">💭 Recommence !</div>';setTimeout(()=>{if(pf)pf.innerHTML='';},800);}
+    pianoSeq.forEach((_,i)=>{ const d=document.getElementById('pd'+i); if(d) d.style.background='rgba(196,96,122,.18)'; });
+    const msg=document.getElementById('piano-msg');
+    if(msg){ msg.textContent='💭 Recommence !'; setTimeout(()=>{ if(msg) msg.textContent='👂 Écoute...'; },800); }
     setTimeout(showPianoSequence, 1000);
   }
 }
@@ -1937,9 +1957,14 @@ function admDay(d) {
 }
 
 function admType(type) {
-  var idx = LEVELS.findIndex(function(l){ return l.type === type; });
-  if (idx === -1) { admToast('Type introuvable'); return; }
+  // Find first level matching type
+  var idx = -1;
+  for(var i = 0; i < LEVELS.length; i++){
+    if(LEVELS[i].type === type){ idx = i; break; }
+  }
+  if (idx === -1) { admToast('Type introuvable dans les 775 niveaux'); return; }
   admGoLevel(idx);
+  closeAdm();
 }
 
 function admPuzzle() {
@@ -2238,6 +2263,7 @@ function toggleBeigeTheme(){
           <button class="adm-btn sec" onclick="admType('simon')">Simon</button>
           <button class="adm-btn sec" onclick="admType('maze')">Labyrinthe</button>
           <button class="adm-btn sec" onclick="admType('connect')">Connecte</button>
+          <button class="adm-btn sec" onclick="admType('playlist')">🎵 Playlist</button>
         </div>
       </div>
       <div class="adm-section">
