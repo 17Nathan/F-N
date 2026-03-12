@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Aventure de Félicia 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose: #e8a0b0;
+  --rose-dark: #c4607a;
+  --gold: #d4a843;
+  --cream: #fdf6ee;
+  --dark: #0d0508;
+  --mid: #1a0a10;
+  --glass: rgba(255,255,255,0.07);
+  --border: rgba(232,160,176,0.2);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--cream);font-family:'Lato',sans-serif;min-height:100vh;overflow-x:hidden;}
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 15% 50%,#3d0a1a 0%,transparent 55%),radial-gradient(ellipse at 85% 20%,#1a0a2e 0%,transparent 55%),radial-gradient(ellipse at 60% 85%,#0a1a10 0%,transparent 45%),#0d0508;}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.3;}50%{opacity:1;}}
+.container{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:20px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+/* INTRO */
+#intro{text-align:center;animation:fadeIn 1.5s ease;}
+.intro-emoji{font-size:4rem;animation:heartbeat 1.5s ease-in-out infinite;display:block;margin-bottom:20px;}
+@keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.25);}}
+.intro-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,7vw,4rem);font-style:italic;background:linear-gradient(135deg,var(--rose),var(--gold),var(--rose-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px;}
+.intro-sub{font-size:1.1rem;color:rgba(253,246,238,.65);font-style:italic;margin-bottom:10px;letter-spacing:.04em;}
+.intro-days{font-size:.9rem;color:var(--gold);letter-spacing:.12em;margin-bottom:35px;}
+.btn-start{background:linear-gradient(135deg,var(--rose-dark),var(--gold));border:none;color:white;padding:16px 50px;font-size:1.15rem;font-family:'Playfair Display',serif;border-radius:50px;cursor:pointer;letter-spacing:.08em;box-shadow:0 0 30px rgba(232,160,176,.4);transition:all .3s;}
+.btn-start:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(232,160,176,.6);}
+
+/* PROGRESS */
+.progress-wrap{width:100%;margin-bottom:25px;}
+.progress-info{display:flex;justify-content:space-between;font-size:.8rem;color:rgba(253,246,238,.45);margin-bottom:7px;letter-spacing:.1em;}
+.progress-bg{background:rgba(255,255,255,.08);border-radius:50px;height:5px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--rose-dark),var(--gold));border-radius:50px;transition:width .8s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px var(--rose);}
+.day-badge{text-align:center;margin-bottom:15px;font-size:.75rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;}
+
+/* CARD */
+.level-card{background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(20px);border-radius:22px;padding:30px 28px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08);animation:slideUp .45s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(25px);}to{opacity:1;transform:translateY(0);}}
+.level-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(212,168,67,.12);border:1px solid rgba(212,168,67,.25);padding:4px 13px;border-radius:50px;font-size:.75rem;letter-spacing:.15em;color:var(--gold);margin-bottom:16px;}
+.level-type{font-size:.7rem;letter-spacing:.22em;color:var(--rose);text-transform:uppercase;margin-bottom:7px;}
+.level-question{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3.5vw,1.5rem);line-height:1.55;margin-bottom:22px;color:var(--cream);}
+
+/* OPTIONS */
+.opts{display:grid;gap:9px;grid-template-columns:1fr 1fr;}
+.opt{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--cream);padding:13px 15px;border-radius:13px;cursor:pointer;font-family:'Lato',sans-serif;font-size:.95rem;text-align:left;transition:all .25s;line-height:1.3;}
+.opt:hover{background:rgba(232,160,176,.14);border-color:var(--rose);transform:translateX(3px);}
+.opt.correct{background:rgba(100,200,120,.18);border-color:#6dc87a;color:#a8f0b0;}
+.opt.wrong{background:rgba(200,80,80,.18);border-color:#e06060;color:#f0a0a0;}
+
+/* INPUT */
+.input-row{display:flex;gap:9px;flex-wrap:wrap;}
+.txt-in{flex:1;min-width:180px;background:rgba(255,255,255,.04);border:1px solid rgba(232,160,176,.28);color:var(--cream);padding:13px 17px;border-radius:13px;font-size:.95rem;font-family:'Lato',sans-serif;outline:none;transition:border-color .3s;}
+.txt-in:focus{border-color:var(--rose);}
+.btn-v{background:linear-gradient(135deg,var(--rose-dark),var(--gold));border:none;color:white;padding:13px 22px;border-radius:13px;cursor:pointer;font-family:'Playfair Display',serif;font-size:.95rem;transition:all .25s;white-space:nowrap;}
+.btn-v:hover{transform:scale(1.05);}
+
+/* MEMORY */
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:10px;}
+.mem-card{aspect-ratio:1;background:rgba(232,160,176,.08);border:1px solid var(--border);border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.7rem;transition:all .25s;user-select:none;}
+.mem-card:hover{background:rgba(232,160,176,.18);}
+.mem-card.flipped{background:rgba(212,168,67,.18);border-color:var(--gold);}
+.mem-card.matched{background:rgba(100,200,120,.18);border-color:#6dc87a;}
+
+/* CLICK */
+.click-arena{position:relative;height:170px;background:rgba(255,255,255,.02);border:1px solid rgba(232,160,176,.1);border-radius:15px;overflow:hidden;margin-top:10px;}
+.click-target{position:absolute;width:58px;height:58px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:radial-gradient(circle,var(--rose),var(--rose-dark));box-shadow:0 0 18px rgba(232,160,176,.5);transition:left .3s,top .3s;animation:pulseBtn 1.2s ease-in-out infinite;}
+@keyframes pulseBtn{0%,100%{box-shadow:0 0 18px rgba(232,160,176,.5);}50%{box-shadow:0 0 32px rgba(232,160,176,.8);}}
+.click-count{text-align:center;margin-top:10px;color:var(--gold);font-size:1rem;}
+
+/* ORDER */
+.order-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.order-item{background:rgba(255,255,255,.04);border:1px solid var(--border);padding:11px 16px;border-radius:11px;cursor:grab;display:flex;align-items:center;gap:11px;transition:all .2s;user-select:none;font-size:.95rem;}
+.order-item:hover{background:rgba(232,160,176,.1);border-color:var(--rose);}
+.drag-h{color:rgba(253,246,238,.25);font-size:1.1rem;}
+
+/* FALLING */
+.fall-arena{position:relative;height:200px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:15px;overflow:hidden;margin-top:10px;cursor:crosshair;}
+.fall-obj{position:absolute;font-size:1.6rem;cursor:pointer;user-select:none;transition:none;}
+.catcher{position:absolute;bottom:10px;width:70px;height:28px;background:linear-gradient(135deg,var(--rose-dark),var(--gold));border-radius:50px;transition:left .05s;transform:translateX(-50%);}
+.fall-score{text-align:center;margin-top:8px;color:var(--gold);font-size:.95rem;}
+
+/* PIANO */
+.piano-wrap{margin-top:10px;}
+.piano-seq{display:flex;gap:6px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
+.piano-note{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;border:1px solid var(--border);background:rgba(255,255,255,.05);}
+.piano-note.active{background:rgba(212,168,67,.4);border-color:var(--gold);}
+.piano-keys{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+.piano-key{width:52px;height:52px;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:all .15s;user-select:none;}
+.piano-key:hover{background:rgba(232,160,176,.2);transform:scale(1.1);}
+.piano-key.hit{background:rgba(100,200,120,.3);border-color:#6dc87a;}
+.piano-key.miss{background:rgba(200,80,80,.3);border-color:#e06060;}
+
+/* SLIDER */
+.slider-wrap{margin-top:15px;}
+.slider-track{position:relative;height:40px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:50px;overflow:hidden;cursor:pointer;}
+.slider-fill{height:100%;background:linear-gradient(90deg,var(--rose-dark),var(--gold));border-radius:50px;transition:width .05s;pointer-events:none;}
+.slider-target{position:absolute;top:0;height:100%;background:rgba(100,200,120,.3);border:2px solid #6dc87a;border-radius:50px;pointer-events:none;}
+.slider-thumb{position:absolute;top:50%;width:30px;height:30px;background:white;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 2px 10px rgba(0,0,0,.4);pointer-events:none;}
+
+/* WORDLE-LIKE */
+.word-grid{display:flex;flex-direction:column;gap:6px;margin-top:10px;align-items:center;}
+.word-row{display:flex;gap:6px;}
+.word-cell{width:44px;height:44px;border:2px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;text-transform:uppercase;transition:all .3s;}
+.word-cell.correct{background:rgba(100,200,120,.3);border-color:#6dc87a;color:#a8f0b0;}
+.word-cell.present{background:rgba(212,168,67,.3);border-color:var(--gold);color:#ffd080;}
+.word-cell.absent{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(253,246,238,.4);}
+.word-keyboard{display:flex;flex-direction:column;gap:5px;margin-top:12px;align-items:center;}
+.word-kb-row{display:flex;gap:4px;}
+.kb-key{min-width:30px;height:36px;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;transition:all .15s;padding:0 6px;color:var(--cream);}
+.kb-key:hover{background:rgba(232,160,176,.2);}
+.kb-key.correct{background:rgba(100,200,120,.3);border-color:#6dc87a;}
+.kb-key.present{background:rgba(212,168,67,.3);border-color:var(--gold);}
+.kb-key.absent{background:rgba(255,255,255,.04);color:rgba(253,246,238,.3);}
+
+/* SIMON */
+.simon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;max-width:260px;margin-left:auto;margin-right:auto;}
+.simon-btn{height:100px;border-radius:14px;cursor:pointer;border:none;transition:all .2s;opacity:.6;}
+.simon-btn.lit{opacity:1;transform:scale(1.05);}
+.simon-btn:nth-child(1){background:linear-gradient(135deg,#e05555,#a02020);}
+.simon-btn:nth-child(2){background:linear-gradient(135deg,#55a0e0,#2060a0);}
+.simon-btn:nth-child(3){background:linear-gradient(135deg,#e0c055,#a08020);}
+.simon-btn:nth-child(4){background:linear-gradient(135deg,#55e080,#20a040);}
+.simon-status{text-align:center;margin-top:10px;font-size:.9rem;color:rgba(253,246,238,.6);}
+
+/* SCRATCH */
+.scratch-wrap{position:relative;margin-top:10px;text-align:center;}
+.scratch-canvas{border-radius:14px;cursor:pointer;border:1px solid var(--border);display:block;margin:0 auto;}
+.scratch-reveal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:14px;font-family:'Dancing Script',cursive;font-size:1.4rem;color:var(--cream);pointer-events:none;opacity:0;transition:opacity .5s;text-align:center;padding:10px;}
+
+/* VRAI/FAUX */
+.vf-btns{display:flex;gap:16px;justify-content:center;margin-top:15px;}
+.vf-btn{flex:1;padding:18px;border:2px solid var(--border);border-radius:16px;cursor:pointer;font-family:'Playfair Display',serif;font-size:1.3rem;background:rgba(255,255,255,.04);color:var(--cream);transition:all .25s;}
+.vf-btn:hover{transform:scale(1.04);}
+.vf-btn.vrai:hover{border-color:#6dc87a;background:rgba(100,200,120,.15);}
+.vf-btn.faux:hover{border-color:#e06060;background:rgba(200,80,80,.15);}
+.vf-btn.correct{border-color:#6dc87a;background:rgba(100,200,120,.2);color:#a8f0b0;}
+.vf-btn.wrong{border-color:#e06060;background:rgba(200,80,80,.2);color:#f0a0a0;}
+/* CONNECT PAIRS */
+.connect-wrap{position:relative;margin-top:12px;}
+.connect-cols{display:flex;justify-content:space-between;gap:10px;}
+.connect-col{display:flex;flex-direction:column;gap:10px;width:42%;}
+.connect-item{padding:11px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;font-size:.9rem;text-align:center;transition:all .25s;background:rgba(255,255,255,.04);user-select:none;}
+.connect-item:hover{border-color:var(--rose);}
+.connect-item.selected{border-color:var(--gold);background:rgba(212,168,67,.15);box-shadow:0 0 12px rgba(212,168,67,.3);}
+.connect-item.matched{border-color:#6dc87a;background:rgba(100,200,120,.15);cursor:default;}
+.connect-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+
+/* MAZE */
+.maze-wrap{margin-top:10px;text-align:center;}
+.maze-canvas{border:1px solid var(--border);border-radius:12px;display:block;margin:0 auto;}
+.maze-tip{font-size:.8rem;color:rgba(253,246,238,.4);margin-top:8px;text-align:center;}
+
+/* COUNTDOWN */
+.countdown-wrap{text-align:center;margin-top:10px;}
+.countdown-display{font-family:'Playfair Display',serif;font-size:4rem;color:var(--gold);margin:10px 0;animation:countPulse .5s ease-in-out infinite alternate;}
+@keyframes countPulse{from{transform:scale(1);}to{transform:scale(1.05);}}
+.countdown-q{font-size:1.1rem;margin-bottom:5px;}
+
+/* CIPHER */
+.cipher-display{font-family:monospace;font-size:1.2rem;letter-spacing:.2em;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;text-align:center;margin-bottom:12px;color:var(--gold);}
+
+/* FEEDBACK */
+.fb{margin-top:12px;padding:11px 16px;border-radius:11px;font-size:.9rem;animation:fadeIn .3s ease;text-align:center;}
+.fb.ok{background:rgba(100,200,120,.12);border:1px solid rgba(109,200,122,.25);color:#a8f0b0;}
+.fb.err{background:rgba(200,80,80,.12);border:1px solid rgba(224,96,96,.25);color:#f0a0a0;}
+.hint-row{margin-top:10px;text-align:right;}
+.hint-btn{background:none;border:1px solid rgba(232,160,176,.18);color:rgba(253,246,238,.35);padding:5px 13px;border-radius:50px;cursor:pointer;font-size:.75rem;transition:all .25s;}
+.hint-btn:hover{border-color:var(--rose);color:var(--rose);}
+.hint-txt{margin-top:7px;font-style:italic;color:rgba(253,246,238,.45);font-size:.85rem;}
+
+/* PUZZLE SCREEN */
+#puzzle-screen{width:100%;text-align:center;}
+.puzzle-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,3rem);font-style:italic;background:linear-gradient(135deg,var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
+.puzzle-grid{display:inline-grid;gap:4px;border:2px solid rgba(212,168,67,.25);border-radius:14px;overflow:hidden;padding:4px;background:rgba(0,0,0,.3);}
+.p-piece{width:75px;height:75px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:all .25s;}
+.p-piece.selected{border-color:var(--gold);box-shadow:0 0 14px rgba(212,168,67,.5);}
+.p-piece:hover:not(.empty){border-color:var(--rose);}
+
+/* FINAL */
+#final-screen{text-align:center;animation:fadeIn 2s ease;}
+.final-heart{font-size:5rem;animation:heartbeat 1.5s ease-in-out infinite;display:block;margin-bottom:20px;}
+.final-title{font-family:'Dancing Script',cursive;font-size:clamp(2.5rem,8vw,4.5rem);background:linear-gradient(135deg,var(--rose),var(--gold),var(--rose-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:25px;}
+.final-photo{width:190px;height:190px;border-radius:50%;background:linear-gradient(135deg,var(--rose-dark),var(--gold));margin:0 auto 28px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;box-shadow:0 0 60px rgba(232,160,176,.5);overflow:hidden;}
+.final-photo img{width:100%;height:100%;object-fit:cover;}
+.final-msg{background:var(--glass);border:1px solid var(--border);border-radius:22px;padding:28px;font-size:clamp(.95rem,2.5vw,1.15rem);line-height:1.95;font-style:italic;color:var(--cream);box-shadow:0 20px 60px rgba(0,0,0,.4);margin-bottom:18px;}
+.final-sig{color:var(--gold);font-family:'Dancing Script',cursive;font-size:2rem;margin-top:12px;}
+
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.hidden{display:none!important;}
+.floating-heart{position:fixed;pointer-events:none;z-index:999;font-size:1.1rem;animation:floatUp 2s ease forwards;}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-90px) scale(1.4);}}
+.confetti-p{position:fixed;width:7px;height:7px;border-radius:2px;pointer-events:none;z-index:999;animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+
+/* ADMIN */
+#admin-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;}
+#admin-box{background:#0d0508;border:1px solid #d4a843;border-radius:20px;width:min(600px,94vw);max-height:88vh;overflow-y:auto;padding:24px;}
+.adm-h{font-family:'Playfair Display',serif;font-size:1.4rem;color:#d4a843;font-style:italic;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}
+.adm-close{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;}
+.adm-section{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.07);}
+.adm-section:last-child{border-bottom:none;}
+.adm-label{font-size:.72rem;letter-spacing:.18em;color:#d4a843;text-transform:uppercase;margin-bottom:10px;}
+.adm-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;align-items:center;}
+.adm-in{flex:1;min-width:100px;background:rgba(255,255,255,.05);border:1px solid rgba(232,160,176,.25);color:#fdf6ee;padding:9px 13px;border-radius:9px;font-size:.9rem;outline:none;font-family:'Lato',sans-serif;}
+.adm-in:focus{border-color:#e8a0b0;}
+.adm-btn{background:linear-gradient(135deg,#c4607a,#d4a843);border:none;color:white;padding:9px 16px;border-radius:9px;cursor:pointer;font-size:.85rem;white-space:nowrap;}
+.adm-btn:hover{opacity:.85;}
+.adm-btn.sec{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fdf6ee;}
+.adm-btn.sec:hover{border-color:#e8a0b0;}
+.adm-btn.red{background:rgba(180,60,60,.4);border:1px solid rgba(180,60,60,.5);color:#f0a0a0;}
+.adm-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px;}
+.adm-tab{padding:6px 14px;border:1px solid rgba(232,160,176,.2);border-radius:50px;cursor:pointer;font-size:.78rem;color:rgba(253,246,238,.45);transition:all .2s;}
+.adm-tab.on{border-color:#d4a843;color:#d4a843;background:rgba(212,168,67,.1);}
+.adm-tc{display:none;}
+.adm-tc.on{display:block;}
+.adm-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a0a10;border:1px solid #d4a843;color:#fdf6ee;padding:10px 22px;border-radius:50px;font-size:.88rem;z-index:99999;pointer-events:none;animation:toastPop .3s ease;}
+@keyframes toastPop{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.adm-img-prev{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,168,67,.4);display:none;margin-top:8px;}
+
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="stars" id="stars"></div>
+<div class="container">
+  <div id="intro">
+    <span class="intro-emoji">💕</span>
+    <h1 class="intro-title">L'Aventure de Félicia</h1>
+    <p class="intro-sub">Une surprise de Nathan, rien que pour toi...</p>
+    <p class="intro-days">✨ 775 défis • plusieurs jours d'aventure ✨</p>
+    <button class="btn-start" onclick="startGame()">Commencer 💕</button>
+  </div>
+
+  <div id="game" class="hidden" style="width:100%">
+    <div class="day-badge" id="day-badge">JOUR 1</div>
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="prog-left">Félicia</span>
+        <span id="prog-right">Niveau 1 / 775</span>
+      </div>
+      <div class="progress-bg"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div class="level-card" id="level-card"></div>
+  </div>
+
+  <div id="puzzle-screen" class="hidden">
+    <h2 class="puzzle-title">Tu l'as mérité ! 🧩</h2>
+    <p style="color:rgba(253,246,238,.55);margin-bottom:18px;font-style:italic">Reconstitue le puzzle pour révéler la surprise...</p>
+    <p style="color:var(--gold);font-size:.9rem;margin-bottom:14px" id="p-prog">0 / 25 pièces</p>
+    <div class="puzzle-grid" id="puzzle-grid" style="grid-template-columns:repeat(5,75px)"></div>
+    <p style="color:rgba(253,246,238,.35);font-size:.8rem;margin-top:10px">Clique deux pièces pour les échanger</p>
+  </div>
+
+  <div id="final-screen" class="hidden">
+    <span class="final-heart">💕</span>
+    <div class="final-photo" id="final-photo"><span>📸</span></div>
+    <h2 class="final-title">Pour toi, Félicia</h2>
+    <div class="final-msg" id="final-msg"></div>
+    <div class="final-sig">— Nathan 💕</div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  STARS
+// ══════════════════════════════════════════
+(function(){
+  const s=document.getElementById('stars');
+  for(let i=0;i<80;i++){
+    const d=document.createElement('div');
+    d.className='star';
+    const sz=Math.random()*2+.5;
+    d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s;`;
+    s.appendChild(d);
+  }
+})();
+
+// ══════════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════════
+let currentLevel = 0;
+let gameActive = true;
+const TOTAL = 775;
+const LEVELS_PER_DAY = Math.ceil(TOTAL / 7); // ~110 per day
+
+// ══════════════════════════════════════════
+//  LEVEL GENERATION
+// ══════════════════════════════════════════
+function buildLevels() {
+  const levels = [];
+
+  // ── QUIZ DATA (used for multiple quiz blocks) ──
+  const quizPool = [
+    {q:"Comment vous êtes-vous rencontrés ?",opts:["Par des amis","Sur les réseaux","Par hasard","Par appli"],a:1,h:"Digital..."},
+    {q:"Quelle est la couleur préférée de Félicia ?",opts:["Rose","Bleu","Violet","Rouge"],a:0,h:"Pense aux fleurs"},
+    {q:"Quel emoji Nathan envoie le plus ?",opts:["😂","💕","🔥","😍"],a:1,h:"Plein d'amour"},
+    {q:"Nathan pense à Félicia...",opts:["Le matin","Le soir","L'après-midi","Tout le temps"],a:3,h:"Sans exception"},
+    {q:"Quelle est la plus belle qualité de Félicia ?",opts:["Son sourire","Sa gentillesse","Son intelligence","Tout en elle"],a:3,h:"Impossible de choisir"},
+    {q:"Combien de messages par jour ?",opts:["Moins de 10","10-50","50-100","Plus de 100"],a:3,h:"Beaucoup..."},
+    {q:"Le premier cadeau digital de Nathan ?",opts:["Une lettre","Un QR code","Un film","Un poème"],a:1,h:"À scanner"},
+    {q:"Rêve de Nathan pour leur futur ?",opts:["Voyager","Vivre ensemble","Se marier","Tout ça"],a:3,h:"Tout est possible"},
+    {q:"Qu'est-ce qui manque le plus à Nathan ?",opts:["Sa voix","Son sourire","Sa présence","Tout d'elle"],a:3,h:"Tout, absolument"},
+    {q:"Quel film regarderaient-ils ensemble ?",opts:["Horreur","Comédie romantique","Action","Animation"],a:1,h:"Romantique bien sûr"},
+    {q:"Saison où ils se sont rencontrés ?",opts:["Printemps","Été","Automne","Hiver"],a:1,h:"Il faisait chaud"},
+    {q:"Quel est le rêve de voyage de Nathan ?",opts:["Paris","New York","Bali","Partout avec toi"],a:3,h:"La destination importe peu"},
+    {q:"Comment Nathan décrit leur amour ?",opts:["Unique","Magique","Infini","Tout ça"],a:3,h:"Les mots ne suffisent pas"},
+    {q:"Ce que fait Félicia qui fait fondre Nathan ?",opts:["Son rire","Ses yeux","Sa façon de parler","Tout"],a:3,h:"Tout sans exception"},
+    {q:"Quelle promesse Nathan a-t-il faite ?",opts:["Être là","Ne jamais partir","Aimer toujours","Tout ça et plus"],a:3,h:"Infinie"},
+    {q:"Combien de pays rêvent-ils de visiter ?",opts:["1-2","3-5","6-10","Tous"],a:3,h:"Le monde entier"},
+    {q:"Que ressent Nathan quand Félicia est triste ?",opts:["Impuissant","Veut tout faire","Triste aussi","Tout ça"],a:3,h:"L'amour c'est ça"},
+    {q:"Première chose que Nathan fait le matin ?",opts:["Se lever","Regarder son phone","Penser à Félicia","Manger"],a:2,h:"Elle est dans ses pensées"},
+    {q:"Quel mot décrit Félicia selon Nathan ?",opts:["Belle","Parfaite","Lumineuse","Tout ça"],a:3,h:"Indescriptible"},
+    {q:"Leur force principale ?",opts:["Confiance","Humour","Distance vaincue","Tout ça"],a:2,h:"Ils sont plus forts que la distance"},
+    {q:"Moment préféré de leur journée ?",opts:["Appels vidéo","Messages matin","Messages soir","Tous"],a:3,h:"Chaque moment"},
+    {q:"Quelle musique met Nathan de bonne humeur ?",opts:["R&B","Pop","Rap","Afro"],a:0,h:"Doux et rythmé"},
+    {q:"Que ferait Nathan si Félicia pleurait ?",opts:["Écouter","Consoler","Faire tout","Tout ça"],a:3,h:"Tout pour elle"},
+    {q:"Premier mot de Nathan en voyant Félicia ?",opts:["Belle","Parfaite","À moi","Tout ça"],a:3,h:"Plusieurs à la fois"},
+    {q:"Dans combien de temps se reverront-ils ?",opts:["Bientôt","Très bientôt","Le plus tôt possible","Hier de préférence"],a:2,h:"Nathan fait tout pour ça"},
+  ];
+
+
+  // ── ORDER DATA ──
+  const orderPool = [
+    {q:"Remets dans l'ordre :",words:["Tu","es","ma","vie"],ans:"Tu es ma vie"},
+    {q:"Forme la phrase :",words:["Je","t'aime","pour","toujours"],ans:"Je t'aime pour toujours"},
+    {q:"Remets en ordre :",words:["Nathan","aime","Félicia"],ans:"Nathan aime Félicia"},
+    {q:"Mets dans l'ordre :",words:["Tu","me","manques","tellement"],ans:"Tu me manques tellement"},
+    {q:"Forme la phrase :",words:["Un","jour","ensemble"],ans:"Un jour ensemble"},
+    {q:"Remets en ordre :",words:["Tu","es","parfaite"],ans:"Tu es parfaite"},
+    {q:"Forme la phrase :",words:["Mon","amour","est","infini"],ans:"Mon amour est infini"},
+    {q:"Mets dans l'ordre :",words:["Pour","toi","toujours"],ans:"Pour toi toujours"},
+    {q:"Remets en ordre :",words:["Je","pense","à","toi"],ans:"Je pense à toi"},
+    {q:"Forme la phrase :",words:["Tu","illumines","ma","vie"],ans:"Tu illumines ma vie"},
+    {q:"Mets dans l'ordre :",words:["La","distance","ne","nous","arrête","pas"],ans:"La distance ne nous arrête pas"},
+    {q:"Remets en ordre :",words:["Chaque","jour","je","t'aime","plus"],ans:"Chaque jour je t'aime plus"},
+    {q:"Forme la phrase :",words:["Tu","es","mon","soleil"],ans:"Tu es mon soleil"},
+    {q:"Mets dans l'ordre :",words:["Je","serai","toujours","là"],ans:"Je serai toujours là"},
+    {q:"Remets en ordre :",words:["Notre","amour","est","unique"],ans:"Notre amour est unique"},
+    {q:"Forme la phrase :",words:["Tu","me","rends","heureux"],ans:"Tu me rends heureux"},
+    {q:"Mets dans l'ordre :",words:["Félicia","je","t'adore"],ans:"Félicia je t'adore"},
+    {q:"Remets en ordre :",words:["Ensemble","nous","sommes","forts"],ans:"Ensemble nous sommes forts"},
+    {q:"Forme la phrase :",words:["Mon","cœur","t'appartient"],ans:"Mon cœur t'appartient"},
+    {q:"Mets dans l'ordre :",words:["Reste","toujours","toi-même"],ans:"Reste toujours toi-même"},
+  ];
+
+  // ── ANAGRAM DATA ──
+  const anagramPool = [
+    {word:"AMOUR",anagram:"OURAM",h:"Un grand sentiment"},
+    {word:"COEUR",anagram:"ROUEC",h:"Organe vital"},
+    {word:"FELIX",anagram:"LEFIX",h:"Un prénom"},
+    {word:"BAISER",anagram:"RESAIB",h:"Un geste tendre"},
+    {word:"TENDRESSE",anagram:"DRESSENET",h:"De la douceur"},
+    {word:"BONHEUR",anagram:"UHERONB",h:"Ce que tu ressens"},
+    {word:"SOLEIL",anagram:"SLOEILL",h:"Il réchauffe"},
+    {word:"ETOILE",anagram:"OTILEE",h:"Dans le ciel la nuit"},
+    {word:"LUMIERE",anagram:"RELUIEM",h:"Elle éclaire"},
+    {word:"DOUCEUR",anagram:"ROUCUEDE",h:"De la tendresse"},
+    {word:"REVE",anagram:"EVER",h:"Quand on dort"},
+    {word:"SOURIRE",anagram:"UROSIRE",h:"Sur le visage"},
+    {word:"VOYAGE",anagram:"YEVAGO",h:"Un déplacement"},
+    {word:"ESPOIR",anagram:"POIRSE",h:"Un sentiment positif"},
+    {word:"PROMESSE",anagram:"SEMSSROP",h:"Un engagement"},
+  ];
+
+  // ── CIPHER DATA (caesar +3) ──
+  const cipherPool = [
+    {plain:"AMOUR",cipher:"DPRXU",h:"Décale chaque lettre de 3"},
+    {plain:"FELICIA",cipher:"IHOLFLB",h:"Code César, décale de 3"},
+    {plain:"NATHAN",cipher:"QDWKDQ",h:"3 lettres en arrière"},
+    {plain:"TOUJOURS",cipher:"WRXMRXUV",h:"César +3"},
+    {plain:"ENSEMBLE",cipher:"HQVHPEOH",h:"Décale de 3"},
+    {plain:"BONHEUR",cipher:"ERQKHXU",h:"Alphabet décalé"},
+    {plain:"LUMIERE",cipher:"OXPLHUH",h:"César +3"},
+    {plain:"SOURIRE",cipher:"VRXULUH",h:"Décale chaque lettre"},
+    {plain:"VOYAGE",cipher:"YRIBSH",h:"3 lettres en avant"},
+    {plain:"PROMESSE",cipher:"SURPHVVH",h:"Code secret +3"},
+  ];
+
+  // ── MEMORY SETS ──
+  const memPools = [
+    ['💕','⭐','🌸','🔥'],['💎','🌺','✨','🦋'],['🌹','💫','🎀','🌙'],
+    ['💖','🌟','💝','🎵'],['🍓','🌈','🎶','💕'],['🦄','🌊','💌','🎠'],
+    ['🌻','🍀','🪷','🌷'],['💛','🌿','🫧','🔮'],['🌴','🦜','💜','🪐'],
+    ['🧸','💟','🎯','🫐'],['🦚','💓','🌸','⚡'],['🎋','💗','🌹','🎪'],
+    ['🌡','💞','🦋','🌺'],['🍭','🌙','💛','🌿'],['🎨','💕','⭐','🌊'],
+    ['🏵','💎','🌈','🦋'],['🌼','💖','⭐','🎵'],['🍃','💝','🌸','🔥'],
+    ['🌠','💌','🦄','🎀'],['🎭','💕','🌺','✨'],
+  ];
+
+
+  // ── VF DATA ──
+  const vfPool = [
+    {q:"Nathan pense à Félicia tous les jours.",a:true,h:"Absolument vrai !"},
+    {q:"La distance a arrêté leur amour.",a:false,h:"Jamais !"},
+    {q:"Nathan a fait une surprise digitale à Félicia.",a:true,h:"Plusieurs même"},
+    {q:"Félicia est la personne la plus précieuse pour Nathan.",a:true,h:"Sans aucun doute"},
+    {q:"Nathan regrette d'avoir rencontré Félicia.",a:false,h:"Jamais de la vie"},
+    {q:"Leur amour est ordinaire.",a:false,h:"Il est unique et magique"},
+    {q:"Nathan veut voyager avec Félicia.",a:true,h:"Partout dans le monde"},
+    {q:"Les kilomètres empêchent Nathan d'aimer Félicia.",a:false,h:"L'amour n'a pas de frontières"},
+    {q:"Félicia rend Nathan heureux.",a:true,h:"Elle est son bonheur"},
+    {q:"Nathan a promis d'être toujours là pour Félicia.",a:true,h:"Une promesse tenue"},
+    {q:"Nathan oublie parfois de penser à Félicia.",a:false,h:"Impossible !"},
+    {q:"Leur relation est basée sur la confiance.",a:true,h:"La base de tout"},
+    {q:"Nathan pense que Félicia est parfaite.",a:true,h:"À ses yeux, oui"},
+    {q:"La distance les a séparés dans leur cœur.",a:false,h:"Jamais de la vie"},
+    {q:"Nathan rêve du jour où il sera enfin près de Félicia.",a:true,h:"Chaque nuit"},
+    {q:"Félicia est la lumière de Nathan.",a:true,h:"Son étoile à lui"},
+    {q:"Nathan préfèrerait être sans Félicia.",a:false,h:"Jamais !"},
+    {q:"Leur amour grandit chaque jour.",a:true,h:"Toujours plus fort"},
+    {q:"Nathan trouverait quelqu'un de mieux que Félicia.",a:false,h:"Impossible"},
+    {q:"Félicia mérite tout le bonheur du monde.",a:true,h:"Et même plus"},
+  ];
+
+  // ── CONNECT DATA ──
+  const connectPool = [
+    {pairs:[["Nathan","Son amoureux"],["Félicia","Sa chérie"],["Distance","Ne les arrête pas"],["Amour","Infini"]]},
+    {pairs:[["Cœur","Appartient à Félicia"],["Sourire","Celui de Félicia"],["Étoile","Félicia la nuit"],["Rêve","Être ensemble"]]},
+    {pairs:[["Soleil","Félicia le matin"],["Promesse","Toujours là"],["Voyage","Ensemble un jour"],["Bonheur","Être avec toi"]]},
+    {pairs:[["Surprise","Créée avec amour"],["Message","Envoyé chaque jour"],["Câlin","Manque à Nathan"],["Voix","La plus belle"]]},
+    {pairs:[["Confiance","Base de tout"],["Patience","Attendre de se voir"],["Fierté","Leur relation"],["Magie","Leur amour"]]},
+    {pairs:[["Rose","Couleur de l'amour"],["Nuit","Étoiles = Félicia"],["Matin","Penser à toi"],["Soir","Te manquer"]]},
+    {pairs:[["Unique","Leur histoire"],["Fort","Leur lien"],["Beau","Leur futur"],["Vrai","Cet amour"]]},
+    {pairs:[["Félicia","Lumière de Nathan"],["Nathan","Cœur de Félicia"],["Ensemble","Un jour bientôt"],["Toujours","Notre promesse"]]},
+    {pairs:[["Infini","Leur amour"],["Précieuse","Elle est"],["Parfaite","À ses yeux"],["Irremplaçable","Absolument"]]},
+    {pairs:[["Kilomètres","Pas un obstacle"],["Téléphone","Lien entre eux"],["Temps","N'efface rien"],["Mots","Ne suffisent pas"]]},
+  ];
+
+  // ── VF & CONNECT indexes ──
+  let vfi=0, coi=0;
+
+  // ══════════════════════
+  //  BUILD 775 LEVELS
+  // ══════════════════════
+  let qi=0, vfi2=0, oi=0, ai=0, ci=0, mi=0, coi2=0, memi=0;
+
+  function nextQuiz(){ const l={type:'quiz',...quizPool[qi%quizPool.length]};qi++;return l; }
+  function nextVF(){ const l={type:'vf',...vfPool[vfi%vfPool.length]};vfi++;return l; }
+  function nextOrder(){ const l={type:'order',...orderPool[oi%orderPool.length]};oi++;return l; }
+  function nextAnagram(){ const l={type:'anagram',...anagramPool[ai%anagramPool.length]};ai++;return l; }
+  function nextCipher(){ const l={type:'cipher',...cipherPool[ci%cipherPool.length]};ci++;return l; }
+  function nextMemory(){ const emojis=memPools[memi%memPools.length];memi++;return{type:'memory',emojis}; }
+  function nextConnect(){ const l={type:'connect',pairs:connectPool[coi%connectPool.length].pairs};coi++;return l; }
+  function nextClick(n){ return{type:'click',target:n,emoji:['💕','⭐','🌸','🔥','💎','🌺','✨','🦋','🌹','💫'][Math.floor(Math.random()*10)]}; }
+  function nextFall(){ return{type:'fall',target:12+Math.floor(Math.random()*8),good:'💕',bad:'💔'}; }
+  function nextPiano(){ 
+    const emojis=['🎵','🎶','🎸','🎹','🎺','🎻','🥁','🪗'];
+    const len=3+Math.floor(Math.random()*3);
+    const seq=Array.from({length:len},()=>emojis[Math.floor(Math.random()*5)]);
+    return{type:'piano',seq,pool:emojis.slice(0,6)};
+  }
+  function nextSlider(){ const target=20+Math.floor(Math.random()*60);return{type:'slider',target,range:10}; }
+  function nextSimon(){ const len=3+Math.floor(si/15);return{type:'simon',len}; }
+  function nextMaze(){ return{type:'maze',size:7+Math.floor(Math.random()*4)}; }
+
+  let si=0;
+
+  // Pattern: varied mix repeating
+  const pattern = [
+    ()=>nextQuiz(), ()=>nextMemory(), ()=>nextClick(6+Math.floor(Math.random()*8)),
+    ()=>nextVF(), ()=>nextFall(), ()=>nextOrder(),
+    ()=>nextAnagram(), ()=>nextPiano(), ()=>nextSlider(),
+    ()=>nextQuiz(), ()=>nextConnect(), ()=>nextMemory(),
+    ()=>nextCipher(), ()=>nextClick(5+Math.floor(Math.random()*10)), ()=>nextOrder(),
+    ()=>nextQuiz(), ()=>nextFall(), ()=>nextVF(),
+    ()=>nextSimon(), ()=>nextAnagram(), ()=>nextMemory(),
+    ()=>nextPiano(), ()=>nextQuiz(), ()=>nextConnect(),
+    ()=>nextOrder(), ()=>nextVF(), ()=>nextClick(8),
+    ()=>nextCipher(), ()=>nextFall(), ()=>nextQuiz(),
+  ];
+
+  for(let i=0;i<TOTAL;i++){
+    const fn=pattern[i%pattern.length];
+    if(fn.toString().includes('simon')) si++;
+    levels.push(fn());
+  }
+  return levels;
+}
+
+const LEVELS = buildLevels();
+
+// ══════════════════════════════════════════
+//  START
+// ══════════════════════════════════════════
+function startGame(){
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  renderLevel();
+}
+
+function updateProgress(){
+  const pct=(currentLevel/TOTAL)*100;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-right').textContent=`Niveau ${currentLevel+1} / ${TOTAL}`;
+  const day=Math.floor(currentLevel/LEVELS_PER_DAY)+1;
+  document.getElementById('day-badge').textContent=`✨ JOUR ${day} ✨`;
+}
+
+function renderLevel(){
+  updateProgress();
+  const lvl=LEVELS[currentLevel];
+  const card=document.getElementById('level-card');
+  card.style.animation='none';
+  void card.offsetWidth;
+  card.style.animation='slideUp .45s ease';
+  switch(lvl.type){
+    case 'quiz': renderQuiz(lvl,card); break;
+    case 'vf': renderVF(lvl,card); break;
+    case 'connect': renderConnect(lvl,card); break;
+    case 'memory': renderMemory(lvl,card); break;
+    case 'click': renderClick(lvl,card); break;
+    case 'order': renderOrder(lvl,card); break;
+    case 'anagram': renderAnagram(lvl,card); break;
+    case 'cipher': renderCipher(lvl,card); break;
+    case 'typing': renderTyping(lvl,card); break;
+    case 'fall': renderFall(lvl,card); break;
+    case 'piano': renderPiano(lvl,card); break;
+    case 'slider': renderSlider(lvl,card); break;
+    case 'simon': renderSimon(lvl,card); break;
+    case 'maze': renderMaze(lvl,card); break;
+    default: nextLevel();
+  }
+}
+
+// ══════════════════════════════════════════
+//  QUIZ
+// ══════════════════════════════════════════
+function renderQuiz(lvl,card){
+  const shuffled=[...lvl.opts.map((o,i)=>({t:o,c:i===lvl.a}))];
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Quiz ✨</div>
+    <div class="level-question">${lvl.q}</div>
+    <div class="opts" id="opts">
+      ${shuffled.map(o=>`<button class="opt" onclick="checkQuiz(this,${o.c})">${o.t}</button>`).join('')}
+    </div>
+    <div class="hint-row"><button class="hint-btn" onclick="showHint(this,'${lvl.h}')">💡 Indice</button><div class="hint-txt hidden" id="ht"></div></div>`;
+}
+function checkQuiz(btn,correct){
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  if(correct){btn.classList.add('correct');spawnHearts();setTimeout(nextLevel,700);}
+  else{btn.classList.add('wrong');setTimeout(()=>{document.querySelectorAll('.opt').forEach(b=>{b.classList.remove('wrong');b.style.opacity='';b.disabled=false;});},900);}
+}
+
+
+// ══════════════════════════════════════════
+//  VRAI / FAUX
+// ══════════════════════════════════════════
+function renderVF(lvl,card){
+  card.innerHTML='<div class="level-badge">💌 Niveau '+(currentLevel+1)+'</div>'
+    +'<div class="level-type">Vrai ou Faux ✅</div>'
+    +'<div class="level-question">'+lvl.q+'</div>'
+    +'<div class="vf-btns">'
+    +'<button class="vf-btn vrai" onclick="checkVF(this,true,'+lvl.a+')">✅ Vrai</button>'
+    +'<button class="vf-btn faux" onclick="checkVF(this,false,'+lvl.a+')">❌ Faux</button>'
+    +'</div>'
+    +'<div id="vff"></div>'
+    +'<div class="hint-row"><button class="hint-btn" onclick="showHint(this,''+lvl.h+'')">💡 Indice</button><div class="hint-txt hidden" id="ht"></div></div>';
+}
+function checkVF(btn,choice,answer){
+  document.querySelectorAll('.vf-btn').forEach(function(b){b.disabled=true;});
+  var correct = (choice===true && answer===true) || (choice===false && answer===false);
+  if(correct){btn.classList.add('correct');spawnHearts();setTimeout(nextLevel,700);}
+  else{btn.classList.add('wrong');setTimeout(function(){document.querySelectorAll('.vf-btn').forEach(function(b){b.classList.remove('wrong');b.disabled=false;});},900);}
+}
+
+
+// ══════════════════════════════════════════
+//  MEMORY
+// ══════════════════════════════════════════
+let mFlipped=[],mMatched=[],mLock=false;
+function renderMemory(lvl,card){
+  mFlipped=[];mMatched=[];mLock=false;
+  const pairs=[...lvl.emojis,...lvl.emojis].sort(()=>Math.random()-.5);
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Mémoire 🧠</div>
+    <div class="level-question">Trouve toutes les paires !</div>
+    <div class="mem-grid" id="mg">
+      ${pairs.map((e,i)=>`<div class="mem-card" data-e="${e}" onclick="flipMem(this)">❓</div>`).join('')}
+    </div>`;
+}
+function flipMem(c){
+  if(mLock||c.classList.contains('flipped')||c.classList.contains('matched'))return;
+  c.textContent=c.dataset.e;c.classList.add('flipped');mFlipped.push(c);
+  if(mFlipped.length===2){
+    mLock=true;
+    const[a,b]=mFlipped;
+    if(a.dataset.e===b.dataset.e){
+      a.classList.add('matched');b.classList.add('matched');
+      mMatched.push(a,b);mFlipped=[];mLock=false;
+      if(mMatched.length===8){spawnHearts();setTimeout(nextLevel,600);}
+    }else{
+      setTimeout(()=>{a.textContent='❓';b.textContent='❓';a.classList.remove('flipped');b.classList.remove('flipped');mFlipped=[];mLock=false;},850);
+    }
+  }
+}
+
+// ══════════════════════════════════════════
+//  CLICK
+// ══════════════════════════════════════════
+let clickN=0;
+function renderClick(lvl,card){
+  clickN=0;
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Réflexes ⚡</div>
+    <div class="level-question">Clique sur le cœur <strong>${lvl.target}</strong> fois !</div>
+    <div class="click-arena" id="ca">
+      <div class="click-target" id="ct" style="left:50%;top:50%;transform:translate(-50%,-50%)" onclick="handleClick(${lvl.target})">${lvl.emoji}</div>
+    </div>
+    <div class="click-count" id="cc">0 / ${lvl.target}</div>`;
+}
+function handleClick(target){
+  clickN++;
+  const cc=document.getElementById('cc');
+  if(cc)cc.textContent=`${clickN} / ${target}`;
+  const ct=document.getElementById('ct'),ca=document.getElementById('ca');
+  if(ct&&ca){
+    ct.style.left=(5+Math.random()*(ca.offsetWidth-68))+'px';
+    ct.style.top=(5+Math.random()*(ca.offsetHeight-68))+'px';
+    ct.style.transform='none';
+  }
+  floatHeart();
+  if(clickN>=target){spawnHearts();setTimeout(nextLevel,500);}
+}
+
+// ══════════════════════════════════════════
+//  ORDER
+// ══════════════════════════════════════════
+let dragSrc=null;
+function renderOrder(lvl,card){
+  const shuffled=[...lvl.words].sort(()=>Math.random()-.5);
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Remets en ordre 📝</div>
+    <div class="level-question">${lvl.q}</div>
+    <div class="order-list" id="ol">
+      ${shuffled.map((w,i)=>`<div class="order-item" draggable="true" data-i="${i}" ondragstart="dStart(event)" ondragover="dOver(event)" ondrop="dDrop(event,${i})"><span class="drag-h">⠿</span><span>${w}</span></div>`).join('')}
+    </div>
+    <div style="margin-top:13px;text-align:center"><button class="btn-v" onclick="checkOrder('${lvl.ans}')">Valider →</button></div>
+    <div id="of"></div>`;
+}
+function dStart(e){dragSrc=parseInt(e.currentTarget.dataset.i);e.currentTarget.classList.add('dragging');}
+function dOver(e){e.preventDefault();}
+function dDrop(e,ti){
+  e.preventDefault();
+  if(dragSrc===null||dragSrc===ti)return;
+  const items=[...document.querySelectorAll('.order-item')];
+  const sc=items[dragSrc].cloneNode(true),tc=items[ti].cloneNode(true);
+  items[dragSrc].replaceWith(tc);items[ti].replaceWith(sc);
+  document.querySelectorAll('.order-item').forEach((el,i)=>{
+    el.dataset.i=i;el.ondragstart=dStart;el.ondragover=dOver;el.ondrop=(ev)=>dDrop(ev,i);
+  });
+  dragSrc=null;
+}
+function checkOrder(ans){
+  const cur=[...document.querySelectorAll('.order-item span:last-child')].map(e=>e.textContent.trim()).join(' ');
+  const fb=document.getElementById('of');
+  if(cur.toLowerCase()===ans.toLowerCase()){
+    if(fb)fb.innerHTML='<div class="fb ok">✨ Parfait !</div>';
+    spawnHearts();setTimeout(nextLevel,700);
+  }else{
+    if(fb)fb.innerHTML='<div class="fb err">💭 Essaie encore...</div>';
+    setTimeout(()=>{if(fb)fb.innerHTML='';},900);
+  }
+}
+
+// ══════════════════════════════════════════
+//  ANAGRAM
+// ══════════════════════════════════════════
+function renderAnagram(lvl,card){
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Anagramme 🔤</div>
+    <div class="level-question">Démêle ces lettres pour trouver le mot caché :</div>
+    <div class="cipher-display">${lvl.anagram}</div>
+    <div class="input-row">
+      <input class="txt-in" id="ana" placeholder="Le mot..." onkeydown="if(event.key==='Enter')checkAnagram('${lvl.word}')">
+      <button class="btn-v" onclick="checkAnagram('${lvl.word}')">→</button>
+    </div>
+    <div id="anf"></div>
+    <div class="hint-row"><button class="hint-btn" onclick="showHint(this,'${lvl.h}')">💡 Indice</button><div class="hint-txt hidden" id="ht"></div></div>`;
+  setTimeout(()=>{const e=document.getElementById('ana');if(e)e.focus();},80);
+}
+function checkAnagram(word){
+  const val=(document.getElementById('ana').value||'').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const fb=document.getElementById('anf');
+  if(val===word.toUpperCase()||val===word.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')){
+    if(fb)fb.innerHTML='<div class="fb ok">✨ Bravo !</div>';
+    spawnHearts();setTimeout(nextLevel,700);
+  }else{
+    if(fb)fb.innerHTML='<div class="fb err">💭 Essaie encore...</div>';
+    setTimeout(()=>{if(fb)fb.innerHTML='';},900);
+  }
+}
+
+// ══════════════════════════════════════════
+//  CIPHER (Caesar +3)
+// ══════════════════════════════════════════
+function renderCipher(lvl,card){
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Code Secret 🔐</div>
+    <div class="level-question">Décode ce message (chaque lettre = lettre -3 dans l'alphabet) :</div>
+    <div class="cipher-display">${lvl.cipher}</div>
+    <div class="input-row">
+      <input class="txt-in" id="ci" placeholder="Le message..." onkeydown="if(event.key==='Enter')checkCipher('${lvl.plain}')">
+      <button class="btn-v" onclick="checkCipher('${lvl.plain}')">→</button>
+    </div>
+    <div id="cif"></div>
+    <div class="hint-row"><button class="hint-btn" onclick="showHint(this,'${lvl.h}')">💡 Indice</button><div class="hint-txt hidden" id="ht"></div></div>`;
+  setTimeout(()=>{const e=document.getElementById('ci');if(e)e.focus();},80);
+}
+function checkCipher(plain){
+  const val=(document.getElementById('ci').value||'').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const fb=document.getElementById('cif');
+  if(val===plain.toUpperCase()){
+    if(fb)fb.innerHTML='<div class="fb ok">✨ Code déchiffré !</div>';
+    spawnHearts();setTimeout(nextLevel,700);
+  }else{
+    if(fb)fb.innerHTML='<div class="fb err">💭 Essaie encore...</div>';
+    setTimeout(()=>{if(fb)fb.innerHTML='';},900);
+  }
+}
+
+// ══════════════════════════════════════════
+//  CONNECT PAIRS
+// ══════════════════════════════════════════
+let connectSelected=null,connectMatched=0,connectTotal=0;
+function renderConnect(lvl,card){
+  connectSelected=null;connectMatched=0;connectTotal=lvl.pairs.length;
+  const left=lvl.pairs.map(p=>p[0]);
+  const right=[...lvl.pairs.map(p=>p[1])].sort(()=>Math.random()-.5);
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Connecte les paires 🔗</div>
+    <div class="level-question">Relie chaque élément à sa paire !</div>
+    <div class="connect-wrap" id="cw">
+      <svg class="connect-svg" id="csv"></svg>
+      <div class="connect-cols">
+        <div class="connect-col" id="col-l">
+          ${left.map((t,i)=>`<div class="connect-item" id="cl${i}" data-side="left" data-idx="${i}" data-val="${t}" onclick="connectClick(this)">${t}</div>`).join('')}
+        </div>
+        <div class="connect-col" id="col-r">
+          ${right.map((t,i)=>`<div class="connect-item" id="cr${i}" data-side="right" data-idx="${i}" data-val="${t}" onclick="connectClick(this)">${t}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div id="cf"></div>`;
+  // Store correct mapping
+  card.dataset.pairs=JSON.stringify(lvl.pairs);
+}
+function connectClick(el){
+  if(el.classList.contains('matched'))return;
+  if(!connectSelected){
+    document.querySelectorAll('.connect-item:not(.matched)').forEach(e=>e.classList.remove('selected'));
+    el.classList.add('selected');
+    connectSelected=el;
+  } else {
+    if(connectSelected===el){el.classList.remove('selected');connectSelected=null;return;}
+    if(connectSelected.dataset.side===el.dataset.side){
+      document.querySelectorAll('.connect-item:not(.matched)').forEach(e=>e.classList.remove('selected'));
+      el.classList.add('selected');connectSelected=el;return;
+    }
+    // Check match
+    const leftEl=connectSelected.dataset.side==='left'?connectSelected:el;
+    const rightEl=connectSelected.dataset.side==='right'?connectSelected:el;
+    const pairs=JSON.parse(document.querySelector('.level-card').dataset.pairs||'[]');
+    const isMatch=pairs.some(p=>p[0]===leftEl.dataset.val&&p[1]===rightEl.dataset.val);
+    if(isMatch){
+      leftEl.classList.add('matched');rightEl.classList.add('matched');
+      leftEl.classList.remove('selected');rightEl.classList.remove('selected');
+      drawConnectLine(leftEl,rightEl);
+      connectMatched++;
+      if(connectMatched>=connectTotal){spawnHearts();setTimeout(nextLevel,800);}
+    } else {
+      leftEl.style.borderColor='#e06060';rightEl.style.borderColor='#e06060';
+      setTimeout(()=>{
+        leftEl.style.borderColor='';rightEl.style.borderColor='';
+        document.querySelectorAll('.connect-item:not(.matched)').forEach(e=>e.classList.remove('selected'));
+      },700);
+    }
+    connectSelected=null;
+  }
+}
+function drawConnectLine(leftEl,rightEl){
+  const svg=document.getElementById('csv');
+  const wrap=document.getElementById('cw');
+  if(!svg||!wrap)return;
+  const wb=wrap.getBoundingClientRect();
+  const lb=leftEl.getBoundingClientRect();
+  const rb=rightEl.getBoundingClientRect();
+  const x1=lb.right-wb.left,y1=lb.top+lb.height/2-wb.top;
+  const x2=rb.left-wb.left,y2=rb.top+rb.height/2-wb.top;
+  svg.style.height=wrap.offsetHeight+'px';
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',x1);line.setAttribute('y1',y1);
+  line.setAttribute('x2',x2);line.setAttribute('y2',y2);
+  line.setAttribute('stroke','rgba(109,200,122,0.6)');line.setAttribute('stroke-width','2');
+  line.setAttribute('stroke-dasharray','5,3');
+  svg.appendChild(line);
+}
+
+// ══════════════════════════════════════════
+//  FALLING HEARTS
+// ══════════════════════════════════════════
+let fallInterval=null,fallCount=0,fallTarget=0,fallActive=false;
+function renderFall(lvl,card){
+  fallCount=0;fallTarget=lvl.target;fallActive=true;
+  if(fallInterval)clearInterval(fallInterval);
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Attrape les cœurs 💕</div>
+    <div class="level-question">Clique sur les 💕, évite les 💔 ! Attrape <strong>${lvl.target}</strong> cœurs.</div>
+    <div class="fall-arena" id="fa"></div>
+    <div class="fall-score" id="fs">0 / ${lvl.target}</div>`;
+  spawnFallingObjects();
+}
+function spawnFallingObjects(){
+  const arena=document.getElementById('fa');
+  if(!arena||!fallActive)return;
+  const isGood=Math.random()>.3;
+  const obj=document.createElement('div');
+  obj.className='fall-obj';
+  obj.textContent=isGood?'💕':'💔';
+  obj.style.left=Math.random()*(arena.offsetWidth-40)+'px';
+  obj.style.top='-40px';
+  obj.style.transition='top 2.2s linear';
+  obj.dataset.good=isGood;
+  arena.appendChild(obj);
+  obj.onclick=()=>{
+    if(obj.dataset.good==='true'){
+      fallCount++;
+      const fs=document.getElementById('fs');
+      if(fs)fs.textContent=`${fallCount} / ${fallTarget}`;
+      floatHeart();
+      obj.remove();
+      if(fallCount>=fallTarget){fallActive=false;if(fallInterval)clearInterval(fallInterval);spawnHearts();setTimeout(nextLevel,600);}
+    }else{
+      obj.style.fontSize='2rem';
+      obj.style.opacity='0.3';
+      setTimeout(()=>obj.remove(),400);
+    }
+  };
+  setTimeout(()=>{obj.style.top=(arena.offsetHeight+10)+'px';},50);
+  setTimeout(()=>obj.remove(),2500);
+  if(fallActive)fallInterval=setTimeout(spawnFallingObjects,700+Math.random()*600);
+}
+
+// ══════════════════════════════════════════
+//  PIANO (sequence)
+// ══════════════════════════════════════════
+let pianoSeq=[],pianoProgress=0,pianoShowing=false;
+function renderPiano(lvl,card){
+  pianoSeq=lvl.seq;pianoProgress=0;pianoShowing=false;
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Mélodie 🎵</div>
+    <div class="level-question">Mémorise et répète la séquence !</div>
+    <div class="piano-wrap">
+      <div class="piano-seq" id="ps">${pianoSeq.map((e,i)=>`<div class="piano-note" id="pn${i}">${e}</div>`).join('')}</div>
+      <div class="piano-keys" id="pk">
+        ${lvl.pool.map(e=>`<div class="piano-key" onclick="pianoHit('${e}')">${e}</div>`).join('')}
+      </div>
+    </div>
+    <div id="pf"></div>`;
+  showPianoSequence();
+}
+function showPianoSequence(){
+  pianoShowing=true;
+  document.querySelectorAll('.piano-key').forEach(k=>k.style.pointerEvents='none');
+  let i=0;
+  const interval=setInterval(()=>{
+    document.querySelectorAll('.piano-note').forEach(n=>n.classList.remove('active'));
+    if(i<pianoSeq.length){document.getElementById('pn'+i)?.classList.add('active');i++;}
+    else{clearInterval(interval);document.querySelectorAll('.piano-note').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.piano-key').forEach(k=>k.style.pointerEvents='');pianoShowing=false;}
+  },700);
+}
+function pianoHit(emoji){
+  if(pianoShowing)return;
+  const expected=pianoSeq[pianoProgress];
+  const keys=[...document.querySelectorAll('.piano-key')];
+  const hitKey=keys.find(k=>k.textContent===emoji);
+  if(emoji===expected){
+    if(hitKey){hitKey.classList.add('hit');setTimeout(()=>hitKey.classList.remove('hit'),300);}
+    pianoProgress++;
+    document.getElementById('pn'+(pianoProgress-1))?.classList.add('active');
+    if(pianoProgress>=pianoSeq.length){spawnHearts();setTimeout(nextLevel,700);}
+  }else{
+    if(hitKey){hitKey.classList.add('miss');setTimeout(()=>hitKey.classList.remove('miss'),300);}
+    pianoProgress=0;
+    document.querySelectorAll('.piano-note').forEach(n=>n.classList.remove('active'));
+    const pf=document.getElementById('pf');
+    if(pf){pf.innerHTML='<div class="fb err">💭 Recommence !</div>';setTimeout(()=>{if(pf)pf.innerHTML='';},800);}
+    setTimeout(showPianoSequence,1000);
+  }
+}
+
+// ══════════════════════════════════════════
+//  SLIDER
+// ══════════════════════════════════════════
+let sliderDown=false,sliderVal=0;
+function renderSlider(lvl,card){
+  sliderVal=0;sliderDown=false;
+  const min=lvl.target-lvl.range,max=lvl.target+lvl.range;
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Timing ⏱️</div>
+    <div class="level-question">Arrête le curseur dans la zone verte ! (${min}% - ${max}%)</div>
+    <div class="slider-wrap">
+      <div class="slider-track" id="st" onclick="stopSlider(${lvl.target},${lvl.range})">
+        <div class="slider-fill" id="sf" style="width:0%"></div>
+        <div class="slider-target" style="left:${min}%;width:${lvl.range*2}%"></div>
+        <div class="slider-thumb" id="sth" style="left:0%"></div>
+      </div>
+    </div>
+    <div id="slf"></div>`;
+  animateSlider();
+}
+let sliderAnim=null,sliderDir=1,sliderPos=0;
+function animateSlider(){
+  if(sliderAnim)cancelAnimationFrame(sliderAnim);
+  function step(){
+    sliderPos+=sliderDir*1.2;
+    if(sliderPos>=100){sliderPos=100;sliderDir=-1;}
+    if(sliderPos<=0){sliderPos=0;sliderDir=1;}
+    const sf=document.getElementById('sf'),sth=document.getElementById('sth');
+    if(sf)sf.style.width=sliderPos+'%';
+    if(sth)sth.style.left=sliderPos+'%';
+    if(document.getElementById('st'))sliderAnim=requestAnimationFrame(step);
+  }
+  sliderAnim=requestAnimationFrame(step);
+}
+function stopSlider(target,range){
+  if(sliderAnim)cancelAnimationFrame(sliderAnim);sliderAnim=null;
+  const fb=document.getElementById('slf');
+  if(sliderPos>=target-range&&sliderPos<=target+range){
+    if(fb)fb.innerHTML='<div class="fb ok">✨ Parfait timing !</div>';
+    spawnHearts();setTimeout(nextLevel,700);
+  }else{
+    if(fb)fb.innerHTML=`<div class="fb err">💭 Trop ${sliderPos<target-range?'tôt':'tard'} ! Réessaie.</div>`;
+    setTimeout(()=>{if(fb)fb.innerHTML='';animateSlider();},1000);
+  }
+}
+
+// ══════════════════════════════════════════
+//  SIMON SAYS
+// ══════════════════════════════════════════
+let simonSeq=[],simonInput=[],simonShowing=false;
+function renderSimon(lvl,card){
+  simonSeq=[];simonInput=[];simonShowing=false;
+  for(let i=0;i<lvl.len;i++)simonSeq.push(Math.floor(Math.random()*4));
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Simon Says 🎮</div>
+    <div class="level-question">Mémorise et répète la séquence de couleurs !</div>
+    <div class="simon-grid">
+      <div class="simon-btn" id="sb0" onclick="simonClick(0)"></div>
+      <div class="simon-btn" id="sb1" onclick="simonClick(1)"></div>
+      <div class="simon-btn" id="sb2" onclick="simonClick(2)"></div>
+      <div class="simon-btn" id="sb3" onclick="simonClick(3)"></div>
+    </div>
+    <div class="simon-status" id="ss">Regarde bien...</div>`;
+  setTimeout(playSimon,600);
+}
+function playSimon(){
+  simonShowing=true;simonInput=[];
+  document.querySelectorAll('.simon-btn').forEach(b=>b.style.pointerEvents='none');
+  const ss=document.getElementById('ss');if(ss)ss.textContent='Mémorise...';
+  let i=0;
+  const iv=setInterval(()=>{
+    if(i>0)document.getElementById('sb'+(simonSeq[i-1]))?.classList.remove('lit');
+    if(i<simonSeq.length){document.getElementById('sb'+simonSeq[i])?.classList.add('lit');i++;}
+    else{
+      clearInterval(iv);
+      setTimeout(()=>{
+        document.querySelectorAll('.simon-btn').forEach(b=>b.style.pointerEvents='');
+        const ss=document.getElementById('ss');if(ss)ss.textContent='À toi !';
+        simonShowing=false;
+      },500);
+    }
+  },600);
+}
+function simonClick(n){
+  if(simonShowing)return;
+  const btn=document.getElementById('sb'+n);
+  if(btn){btn.classList.add('lit');setTimeout(()=>btn.classList.remove('lit'),200);}
+  simonInput.push(n);
+  const idx=simonInput.length-1;
+  if(simonInput[idx]!==simonSeq[idx]){
+    const ss=document.getElementById('ss');if(ss)ss.textContent='❌ Recommence !';
+    simonInput=[];setTimeout(playSimon,800);
+  }else if(simonInput.length===simonSeq.length){
+    const ss=document.getElementById('ss');if(ss)ss.textContent='✨ Parfait !';
+    spawnHearts();setTimeout(nextLevel,700);
+  }
+}
+
+// ══════════════════════════════════════════
+//  MAZE (simple canvas maze)
+// ══════════════════════════════════════════
+let mazeData=null,mazePlayer={x:0,y:0},mazeGoal={x:0,y:0},mazeCanvas=null,mazeCtx=null;
+function renderMaze(lvl,card){
+  const size=lvl.size||7;
+  card.innerHTML=`
+    <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
+    <div class="level-type">Labyrinthe 🗺️</div>
+    <div class="level-question">Trouve le chemin jusqu'au 💕 !</div>
+    <div class="maze-wrap">
+      <canvas class="maze-canvas" id="mc" width="${size*40}" height="${size*40}"></canvas>
+      <p class="maze-tip">⬆️ ⬇️ ⬅️ ➡️ ou swipe</p>
+    </div>`;
+  mazeCanvas=document.getElementById('mc');
+  mazeCtx=mazeCanvas.getContext('2d');
+  mazeData=generateMaze(size);
+  mazePlayer={x:0,y:0};
+  mazeGoal={x:size-1,y:size-1};
+  drawMaze(size);
+  mazeCanvas.setAttribute('tabindex','0');
+  mazeCanvas.focus();
+  mazeCanvas.onkeydown=mazeMoveKey;
+  document.onkeydown=mazeMoveKey;
+
+  // Touch support
+  let tx0=0,ty0=0;
+  mazeCanvas.ontouchstart=e=>{tx0=e.touches[0].clientX;ty0=e.touches[0].clientY;};
+  mazeCanvas.ontouchend=e=>{
+    const dx=e.changedTouches[0].clientX-tx0,dy=e.changedTouches[0].clientY-ty0;
+    if(Math.abs(dx)>Math.abs(dy)){mazeMove(dx>0?'right':'left');}
+    else{mazeMove(dy>0?'down':'up');}
+  };
+}
+function generateMaze(n){
+  const grid=Array.from({length:n},()=>Array.from({length:n},()=>({r:true,d:true,visited:false})));
+  const stack=[];let cur={x:0,y:0};
+  grid[0][0].visited=true;stack.push(cur);
+  while(stack.length){
+    const neighbors=[];
+    const dirs=[{dx:0,dy:-1,wall:'d',from:'d'},{dx:0,dy:1,wall:'d',from:'d'},{dx:-1,dy:0,wall:'r',from:'r'},{dx:1,dy:0,wall:'r',from:'r'}];
+    for(const{dx,dy}of dirs){
+      const nx=cur.x+dx,ny=cur.y+dy;
+      if(nx>=0&&nx<n&&ny>=0&&ny<n&&!grid[ny][nx].visited)neighbors.push({x:nx,y:ny,dx,dy});
+    }
+    if(neighbors.length){
+      const next=neighbors[Math.floor(Math.random()*neighbors.length)];
+      if(next.dx===1)grid[cur.y][cur.x].r=false;
+      else if(next.dx===-1)grid[next.y][next.x].r=false;
+      else if(next.dy===1)grid[cur.y][cur.x].d=false;
+      else if(next.dy===-1)grid[next.y][next.x].d=false;
+      grid[next.y][next.x].visited=true;
+      stack.push(cur);cur=next;
+    }else{cur=stack.pop()||{x:0,y:0};}
+  }
+  return grid;
+}
+function drawMaze(size){
+  if(!mazeCtx||!mazeData)return;
+  const cell=40,n=size||mazeData.length;
+  mazeCtx.fillStyle='#0d0508';mazeCtx.fillRect(0,0,n*cell,n*cell);
+  mazeCtx.strokeStyle='rgba(232,160,176,0.5)';mazeCtx.lineWidth=2;
+  for(let y=0;y<n;y++){
+    for(let x=0;x<n;x++){
+      const c=mazeData[y][x];
+      if(x===0){mazeCtx.beginPath();mazeCtx.moveTo(x*cell,y*cell);mazeCtx.lineTo(x*cell,(y+1)*cell);mazeCtx.stroke();}
+      if(y===0){mazeCtx.beginPath();mazeCtx.moveTo(x*cell,y*cell);mazeCtx.lineTo((x+1)*cell,y*cell);mazeCtx.stroke();}
+      if(c.r){mazeCtx.beginPath();mazeCtx.moveTo((x+1)*cell,y*cell);mazeCtx.lineTo((x+1)*cell,(y+1)*cell);mazeCtx.stroke();}
+      if(c.d){mazeCtx.beginPath();mazeCtx.moveTo(x*cell,(y+1)*cell);mazeCtx.lineTo((x+1)*cell,(y+1)*cell);mazeCtx.stroke();}
+    }
+  }
+  // Goal
+  mazeCtx.font=`${cell*.6}px serif`;mazeCtx.textAlign='center';mazeCtx.textBaseline='middle';
+  mazeCtx.fillText('💕',(mazeGoal.x+.5)*cell,(mazeGoal.y+.5)*cell);
+  // Player
+  mazeCtx.fillStyle='rgba(232,160,176,.9)';
+  mazeCtx.beginPath();mazeCtx.arc((mazePlayer.x+.5)*cell,(mazePlayer.y+.5)*cell,cell*.28,0,Math.PI*2);mazeCtx.fill();
+}
+function mazeMoveKey(e){
+  const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};
+  if(map[e.key]){e.preventDefault();mazeMove(map[e.key]);}
+}
+function mazeMove(dir){
+  if(!mazeData)return;
+  const n=mazeData.length;const{x,y}=mazePlayer;let nx=x,ny=y;
+  if(dir==='up'&&y>0&&!mazeData[y-1][x].d)ny--;
+  else if(dir==='down'&&y<n-1&&!mazeData[y][x].d)ny++;
+  else if(dir==='left'&&x>0&&!mazeData[y][x-1].r)nx--;
+  else if(dir==='right'&&x<n-1&&!mazeData[y][x].r)nx++;
+  mazePlayer={x:nx,y:ny};
+  drawMaze(n);
+  if(nx===mazeGoal.x&&ny===mazeGoal.y){document.onkeydown=null;spawnHearts();setTimeout(nextLevel,700);}
+}
+
+// ══════════════════════════════════════════
+//  NEXT LEVEL
+// ══════════════════════════════════════════
+function nextLevel(){
+  fallActive=false;
+  if(fallInterval){clearTimeout(fallInterval);fallInterval=null;}
+  if(sliderAnim){cancelAnimationFrame(sliderAnim);sliderAnim=null;}
+  document.onkeydown=null;
+  currentLevel++;
+  if(currentLevel>=TOTAL){
+    document.getElementById('game').classList.add('hidden');
+    startPuzzle();
+  }else{
+    renderLevel();
+  }
+}
+
+// ══════════════════════════════════════════
+//  PUZZLE
+// ══════════════════════════════════════════
+let puzzlePieces=[],selectedPiece=null,puzzleSolved=0;
+const PUZZLE_SIZE=5;
+let PUZZLE_EMOJIS=['💕','⭐','🌸','🔥','💎','🌺','✨','🦋','🌹','💫','🎀','🌙','💖','🌟','💝','🎵','🌈','🦄','🌊','💌','🎠','🌻','🍀','🪷','🌷'];
+
+function startPuzzle(){
+  document.getElementById('puzzle-screen').classList.remove('hidden');
+  puzzleSolved=0;selectedPiece=null;
+  puzzlePieces=Array.from({length:PUZZLE_SIZE*PUZZLE_SIZE},(_,i)=>i);
+  for(let i=puzzlePieces.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[puzzlePieces[i],puzzlePieces[j]]=[puzzlePieces[j],puzzlePieces[i]];}
+  renderPuzzle();
+}
+function renderPuzzle(){
+  const grid=document.getElementById('puzzle-grid');
+  grid.innerHTML=puzzlePieces.map((p,i)=>`<div class="p-piece" data-i="${i}" onclick="selectPuzzle(${i})">${PUZZLE_EMOJIS[p]}</div>`).join('');
+  const solved=puzzlePieces.filter((p,i)=>p===i).length;
+  document.getElementById('p-prog').textContent=`${solved} / ${PUZZLE_SIZE*PUZZLE_SIZE} pièces`;
+  if(solved===PUZZLE_SIZE*PUZZLE_SIZE){spawnConfetti();setTimeout(showFinal,1500);}
+}
+function selectPuzzle(idx){
+  const pieces=document.querySelectorAll('.p-piece');
+  if(selectedPiece===null){selectedPiece=idx;pieces[idx].classList.add('selected');}
+  else{
+    if(selectedPiece===idx){pieces[idx].classList.remove('selected');selectedPiece=null;return;}
+    [puzzlePieces[selectedPiece],puzzlePieces[idx]]=[puzzlePieces[idx],puzzlePieces[selectedPiece]];
+    pieces[selectedPiece].classList.remove('selected');selectedPiece=null;
+    renderPuzzle();
+  }
+}
+
+// ══════════════════════════════════════════
+//  FINAL
+// ══════════════════════════════════════════
+const FINAL_MESSAGE="Félicia, tu viens de traverser 775 défis et chacun d'eux représentait un de mes sourires en pensant à toi. La distance ne m'a jamais empêché de t'aimer chaque jour davantage. Tu es ma lumière, mon sourire, ma raison de tout donner. Je suis fier de nous, de ce qu'on a construit malgré les kilomètres. Un jour, je serai là, près de toi, et ce jour-là sera le plus beau de ma vie. En attendant, sache que dans chacun de mes gestes, de mes surprises, de mes mots... c'est toi. Toujours toi. Je t'aime infiniment, Félicia.";
+
+function showFinal(){
+  document.getElementById('puzzle-screen').classList.add('hidden');
+  document.getElementById('final-screen').classList.remove('hidden');
+  document.getElementById('final-msg').innerHTML=FINAL_MESSAGE.split('. ').map(s=>`<p style="margin-bottom:10px">${s.trim()}${s.trim().endsWith('.')?'':'.'}</p>`).join('');
+  spawnConfetti();setTimeout(spawnConfetti,1000);setTimeout(spawnConfetti,2000);
+}
+
+// ══════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════
+function showHint(btn,hint){
+  btn.style.display='none';
+  const ht=document.getElementById('ht');
+  if(ht){ht.textContent='💡 '+hint;ht.classList.remove('hidden');}
+}
+function spawnHearts(){
+  for(let i=0;i<6;i++){
+    setTimeout(()=>{
+      const h=document.createElement('div');
+      h.className='floating-heart';
+      h.textContent=['💕','❤️','🌸','✨','💫','⭐'][Math.floor(Math.random()*6)];
+      h.style.left=(15+Math.random()*70)+'vw';
+      h.style.top=(25+Math.random()*50)+'vh';
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),2000);
+    },i*100);
+  }
+}
+function floatHeart(){
+  const h=document.createElement('div');
+  h.className='floating-heart';h.textContent='💕';
+  h.style.left=(20+Math.random()*60)+'vw';h.style.top='65vh';
+  document.body.appendChild(h);setTimeout(()=>h.remove(),2000);
+}
+function spawnConfetti(){
+  const cols=['#e8a0b0','#d4a843','#c4607a','#fff0f5','#ffd700','#a0e8c0'];
+  for(let i=0;i<70;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');c.className='confetti-p';
+      c.style.left=Math.random()*100+'vw';
+      c.style.background=cols[Math.floor(Math.random()*cols.length)];
+      c.style.animationDuration=(1.5+Math.random()*2.5)+'s';
+      c.style.animationDelay=Math.random()*.5+'s';
+      document.body.appendChild(c);setTimeout(()=>c.remove(),4500);
+    },i*25);
+  }
+}
+
+// ══ ADMIN ══
+var admPhoto = null;
+var admMsg = null;
+var admResetConfirm = false;
+
+function admToast(txt) {
+  var old = document.querySelector('.adm-toast');
+  if (old) old.remove();
+  var t = document.createElement('div');
+  t.className = 'adm-toast';
+  t.textContent = txt;
+  document.body.appendChild(t);
+  setTimeout(function(){ if(t.parentNode) t.remove(); }, 2200);
+}
+
+function openAdm() {
+  var el = document.getElementById('admin-overlay');
+  if (!el) return;
+  el.style.display = 'flex';
+  var msgEl = document.getElementById('adm-msg');
+  if (msgEl) msgEl.value = admMsg || FINAL_MESSAGE;
+  var ep = document.getElementById('adm-ep');
+  if (ep) ep.value = PUZZLE_EMOJIS.join(',');
+  var fileEl = document.getElementById('adm-file');
+  if (fileEl) fileEl.onchange = admPhotoFile;
+}
+
+function closeAdm() {
+  var el = document.getElementById('admin-overlay');
+  if (el) el.style.display = 'none';
+  admResetConfirm = false;
+}
+
+function admTab(id) {
+  var tabs = document.querySelectorAll('.adm-tab');
+  var tcs = document.querySelectorAll('.adm-tc');
+  var ids = ['tp','ph','ms','em'];
+  tabs.forEach(function(t,i){ t.classList.toggle('on', ids[i]===id); });
+  tcs.forEach(function(tc){ tc.classList.toggle('on', tc.id==='adm-'+id); });
+}
+
+function admGoLevel(lvl) {
+  currentLevel = lvl;
+  fallActive = false;
+  if (fallInterval) { clearTimeout(fallInterval); fallInterval = null; }
+  if (sliderAnim) { cancelAnimationFrame(sliderAnim); sliderAnim = null; }
+  document.onkeydown = null;
+  document.getElementById('final-screen').classList.add('hidden');
+  document.getElementById('puzzle-screen').classList.add('hidden');
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  renderLevel();
+  closeAdm();
+}
+
+function admGo() {
+  var v = parseInt(document.getElementById('adm-lvl').value);
+  if (!v || v < 1 || v > 775) { admToast('Entre un niveau entre 1 et 775'); return; }
+  admGoLevel(v - 1);
+}
+
+function admDay(d) {
+  admGoLevel((d-1) * Math.ceil(TOTAL/7));
+}
+
+function admType(type) {
+  var idx = LEVELS.findIndex(function(l){ return l.type === type; });
+  if (idx === -1) { admToast('Type introuvable'); return; }
+  admGoLevel(idx);
+}
+
+function admPuzzle() {
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('final-screen').classList.add('hidden');
+  document.getElementById('intro').classList.add('hidden');
+  startPuzzle();
+  closeAdm();
+}
+
+function admFinal() {
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('puzzle-screen').classList.add('hidden');
+  document.getElementById('intro').classList.add('hidden');
+  showFinal();
+  closeAdm();
+}
+
+function admSkip() {
+  closeAdm();
+  nextLevel();
+}
+
+function admReset() {
+  if (!admResetConfirm) {
+    admResetConfirm = true;
+    admToast('Clique encore pour confirmer le reset');
+    return;
+  }
+  admResetConfirm = false;
+  currentLevel = 0;
+  document.getElementById('final-screen').classList.add('hidden');
+  document.getElementById('puzzle-screen').classList.add('hidden');
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('intro').classList.remove('hidden');
+  closeAdm();
+}
+
+function admPhotoUrl() {
+  var url = (document.getElementById('adm-url').value || '').trim();
+  if (!url) return;
+  admPhoto = url;
+  admApplyPhoto(url);
+}
+
+function admPhotoFile() {
+  var file = document.getElementById('adm-file').files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    admPhoto = e.target.result;
+    admApplyPhoto(e.target.result);
+    var prev = document.getElementById('adm-prev');
+    if (prev) { prev.src = e.target.result; prev.style.display = 'block'; }
+    admToast('Photo enregistrée !');
+  };
+  reader.readAsDataURL(file);
+}
+
+function admApplyPhoto(src) {
+  var fp = document.getElementById('final-photo');
+  if (fp) fp.innerHTML = '<img src="' + src + '" alt="photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+}
+
+function admSaveMsg() {
+  var val = (document.getElementById('adm-msg').value || '').trim();
+  if (!val) return;
+  admMsg = val;
+  admToast('Message sauvegardé !');
+}
+
+function admSaveFall() {
+  var g = document.getElementById('adm-eg').value || '💕';
+  var b = document.getElementById('adm-eb').value || '💔';
+  LEVELS.forEach(function(l){ if(l.type==='fall'){ l.good=g; l.bad=b; } });
+  admToast('Emojis mis à jour !');
+}
+
+function admSaveClick() {
+  var e = document.getElementById('adm-ec').value || '💕';
+  LEVELS.forEach(function(l){ if(l.type==='click') l.emoji=e; });
+  admToast('Emoji mis à jour !');
+}
+
+function admSavePuzzle() {
+  var val = document.getElementById('adm-ep').value || '';
+  var arr = val.split(',').map(function(e){ return e.trim(); }).filter(Boolean);
+  if (arr.length < 25) { admToast('Il faut 25 emojis !'); return; }
+  PUZZLE_EMOJIS.splice(0, PUZZLE_EMOJIS.length);
+  arr.slice(0,25).forEach(function(e){ PUZZLE_EMOJIS.push(e); });
+  admToast('Puzzle mis à jour !');
+}
+
+// Patch showFinal to use custom message/photo
+var _origShowFinal = showFinal;
+showFinal = function() {
+  document.getElementById('puzzle-screen').classList.add('hidden');
+  document.getElementById('final-screen').classList.remove('hidden');
+  var msg = admMsg || FINAL_MESSAGE;
+  var fmEl = document.getElementById('final-msg');
+  if (fmEl) {
+    fmEl.innerHTML = '';
+    msg.split('. ').forEach(function(s) {
+      var p = document.createElement('p');
+      p.style.marginBottom = '10px';
+      p.textContent = s.trim() + (s.trim().slice(-1)==='.'?'':'.');
+      fmEl.appendChild(p);
+    });
+  }
+  if (admPhoto) admApplyPhoto(admPhoto);
+  spawnConfetti();
+  setTimeout(spawnConfetti, 1000);
+  setTimeout(spawnConfetti, 2000);
+};
+
+// Secret access: check URL param ?admin on load
+(function(){
+  if (window.location.search.indexOf('admin') !== -1) {
+    document.addEventListener('DOMContentLoaded', function(){
+      openAdm();
+    });
+  }
+})();
+
+</script>
+
+<div id="admin-overlay" style="display:none">
+  <div id="admin-box">
+    <div class="adm-h">
+      <span>⚙️ Admin — Nathan</span>
+      <button class="adm-close" onclick="closeAdm()">✕</button>
+    </div>
+    <div class="adm-tabs">
+      <div class="adm-tab on" onclick="admTab('tp')">🚀 Téléport</div>
+      <div class="adm-tab" onclick="admTab('ph')">📸 Photo</div>
+      <div class="adm-tab" onclick="admTab('ms')">💌 Message</div>
+      <div class="adm-tab" onclick="admTab('em')">🎨 Emojis</div>
+    </div>
+
+    <div class="adm-tc on" id="adm-tp">
+      <div class="adm-section">
+        <div class="adm-label">Aller à un niveau</div>
+        <div class="adm-row">
+          <input class="adm-in" type="number" id="adm-lvl" placeholder="1 - 775" min="1" max="775" style="max-width:120px">
+          <button class="adm-btn" onclick="admGo()">Aller →</button>
+        </div>
+      </div>
+      <div class="adm-section">
+        <div class="adm-label">Aller par jour</div>
+        <div class="adm-row">
+          <button class="adm-btn sec" onclick="admDay(1)">Jour 1</button>
+          <button class="adm-btn sec" onclick="admDay(2)">Jour 2</button>
+          <button class="adm-btn sec" onclick="admDay(3)">Jour 3</button>
+          <button class="adm-btn sec" onclick="admDay(4)">Jour 4</button>
+          <button class="adm-btn sec" onclick="admDay(5)">Jour 5</button>
+          <button class="adm-btn sec" onclick="admDay(6)">Jour 6</button>
+          <button class="adm-btn sec" onclick="admDay(7)">Jour 7</button>
+        </div>
+      </div>
+      <div class="adm-section">
+        <div class="adm-label">Aller par type de jeu</div>
+        <div class="adm-row">
+          <button class="adm-btn sec" onclick="admType('quiz')">Quiz</button>
+          <button class="adm-btn sec" onclick="admType('vf')">Vrai/Faux</button>
+          <button class="adm-btn sec" onclick="admType('memory')">Mémoire</button>
+          <button class="adm-btn sec" onclick="admType('click')">Réflexes</button>
+          <button class="adm-btn sec" onclick="admType('order')">Ordre</button>
+          <button class="adm-btn sec" onclick="admType('anagram')">Anagramme</button>
+          <button class="adm-btn sec" onclick="admType('cipher')">Code secret</button>
+          <button class="adm-btn sec" onclick="admType('fall')">Cœurs</button>
+          <button class="adm-btn sec" onclick="admType('piano')">Mélodie</button>
+          <button class="adm-btn sec" onclick="admType('slider')">Timing</button>
+          <button class="adm-btn sec" onclick="admType('simon')">Simon</button>
+          <button class="adm-btn sec" onclick="admType('maze')">Labyrinthe</button>
+          <button class="adm-btn sec" onclick="admType('connect')">Connecte</button>
+        </div>
+      </div>
+      <div class="adm-section">
+        <div class="adm-label">Raccourcis</div>
+        <div class="adm-row">
+          <button class="adm-btn sec" onclick="admPuzzle()">🧩 Puzzle</button>
+          <button class="adm-btn sec" onclick="admFinal()">💕 Fin</button>
+          <button class="adm-btn sec" onclick="admSkip()">⏭ Passer</button>
+          <button class="adm-btn red" onclick="admReset()">🔄 Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="adm-tc" id="adm-ph">
+      <div class="adm-section">
+        <div class="adm-label">Photo finale (votre photo)</div>
+        <div class="adm-label" style="text-transform:none;letter-spacing:0;color:rgba(253,246,238,.5);margin-bottom:8px">Upload depuis ton téléphone :</div>
+        <input type="file" id="adm-file" accept="image/*" style="color:rgba(253,246,238,.6);font-size:.85rem;width:100%">
+        <img id="adm-prev" class="adm-img-prev">
+        <div class="adm-label" style="text-transform:none;letter-spacing:0;color:rgba(253,246,238,.5);margin-top:14px;margin-bottom:6px">Ou colle une URL :</div>
+        <div class="adm-row">
+          <input class="adm-in" id="adm-url" placeholder="https://...">
+          <button class="adm-btn" onclick="admPhotoUrl()">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="adm-tc" id="adm-ms">
+      <div class="adm-section">
+        <div class="adm-label">Message d'amour final</div>
+        <textarea class="adm-in" id="adm-msg" rows="8" style="width:100%;resize:vertical;line-height:1.6"></textarea>
+        <div class="adm-row" style="margin-top:8px">
+          <button class="adm-btn" onclick="admSaveMsg()">💾 Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="adm-tc" id="adm-em">
+      <div class="adm-section">
+        <div class="adm-label">Emoji cœurs qui tombent (bon / mauvais)</div>
+        <div class="adm-row">
+          <input class="adm-in" id="adm-eg" placeholder="💕" maxlength="2" style="max-width:70px;text-align:center;font-size:1.3rem">
+          <input class="adm-in" id="adm-eb" placeholder="💔" maxlength="2" style="max-width:70px;text-align:center;font-size:1.3rem">
+          <button class="adm-btn" onclick="admSaveFall()">OK</button>
+        </div>
+      </div>
+      <div class="adm-section">
+        <div class="adm-label">Emoji réflexes</div>
+        <div class="adm-row">
+          <input class="adm-in" id="adm-ec" placeholder="💕" maxlength="2" style="max-width:70px;text-align:center;font-size:1.3rem">
+          <button class="adm-btn" onclick="admSaveClick()">OK</button>
+        </div>
+      </div>
+      <div class="adm-section">
+        <div class="adm-label">Emojis puzzle (25, séparés par virgule)</div>
+        <input class="adm-in" id="adm-ep" style="width:100%" placeholder="💕,⭐,🌸,...">
+        <div class="adm-row" style="margin-top:8px">
+          <button class="adm-btn" onclick="admSavePuzzle()">OK</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
