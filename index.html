@@ -269,15 +269,79 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
     <h1 class="intro-title">L'Aventure de Félicia</h1>
     <p class="intro-sub">Une surprise de Nathan, rien que pour toi...</p>
     <p class="intro-days">✨ 775 défis • plusieurs jours d'aventure ✨</p>
+
+    <!-- INSTALL BANNER — très visible, en premier -->
+    <div id="install-banner" style="background:linear-gradient(135deg,rgba(232,130,154,.18),rgba(240,160,181,.12));border:2px solid rgba(196,96,122,.35);border-radius:18px;padding:16px 18px;margin-bottom:22px;text-align:center;">
+      <p style="margin:0 0 6px;font-size:.78rem;font-weight:700;letter-spacing:.08em;color:#a03050;text-transform:uppercase;">⚡ Fais ça en premier !</p>
+      <p style="margin:0 0 12px;font-size:.82rem;color:rgba(42,16,32,.55);line-height:1.5;">Ajoute le jeu à ton écran d'accueil pour y accéder en un tap et garder ta progression 💾</p>
+      <button onclick="showInstallGuide()" style="background:linear-gradient(135deg,#e8829a,#d46080);color:white;border:none;padding:12px 28px;border-radius:50px;font-size:.95rem;font-family:'Playfair Display',serif;cursor:pointer;box-shadow:0 4px 16px rgba(196,96,122,.4);font-weight:700;letter-spacing:.03em;">📲 Ajouter à l'écran d'accueil</button>
+    </div>
+
+    <!-- Boutons jeu -->
     <div id="resume-banner" style="display:none;margin-bottom:14px;background:rgba(232,160,176,.15);border:1px solid rgba(196,96,122,.25);border-radius:14px;padding:12px 18px;font-size:.9rem;color:#a03050;">
-      💾 Progression sauvegardée détectée !<br>
-      <button onclick="startGame()" style="margin-top:8px;background:linear-gradient(135deg,#e8829a,#f0a0b5);border:none;color:white;padding:8px 20px;border-radius:50px;cursor:pointer;font-size:.9rem;">Reprendre ▶</button>
-      <button onclick="startFresh()" style="margin-top:8px;margin-left:8px;background:none;border:1px solid rgba(196,96,122,.3);color:#c4607a;padding:8px 16px;border-radius:50px;cursor:pointer;font-size:.85rem;">Recommencer</button>
+      💾 Progression sauvegardée !<br>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;">
+        <button onclick="startGame()" style="background:linear-gradient(135deg,#e8829a,#f0a0b5);border:none;color:white;padding:10px 22px;border-radius:50px;cursor:pointer;font-size:.9rem;font-weight:700;">▶ Reprendre</button>
+        <button onclick="startFresh()" style="background:none;border:1px solid rgba(196,96,122,.3);color:#c4607a;padding:10px 18px;border-radius:50px;cursor:pointer;font-size:.85rem;">Recommencer</button>
+      </div>
     </div>
     <button class="btn-start" id="btn-start-fresh" onclick="startGame()">Commencer 💕</button>
   </div>
 
+  <!-- Install guide popup -->
+  <div id="install-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeInstallGuide()">
+    <div id="install-box" style="background:#fff8f4;border-radius:24px 24px 0 0;padding:28px 24px 36px;width:100%;max-width:480px;animation:slideUp .35s ease;">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:2rem;margin-bottom:6px;">📲</div>
+        <h3 style="font-family:'Playfair Display',serif;color:#a03050;font-size:1.2rem;margin:0 0 4px;">Ajouter au bureau</h3>
+        <p style="font-size:.82rem;color:rgba(42,16,32,.45);margin:0;">Lance le jeu en un tap, comme une vraie app !</p>
+      </div>
+      <!-- iPhone instructions -->
+      <div id="install-ios" style="display:none;">
+        <div style="background:rgba(232,160,176,.1);border-radius:14px;padding:14px 16px;margin-bottom:10px;">
+          <p style="margin:0 0 10px;font-size:.88rem;color:#a03050;font-weight:700;">Sur iPhone / iPad :</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.85rem;color:#2a1020;">
+            <span style="font-size:1.3rem;">1️⃣</span> Appuie sur <span style="background:#e8829a;color:white;padding:2px 8px;border-radius:6px;font-size:.8rem;">⎙ Partager</span> en bas de Safari
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.85rem;color:#2a1020;">
+            <span style="font-size:1.3rem;">2️⃣</span> Descends et appuie sur <strong>"Sur l'écran d'accueil"</strong>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;color:#2a1020;">
+            <span style="font-size:1.3rem;">3️⃣</span> Appuie sur <strong>"Ajouter"</strong> en haut à droite
+          </div>
+        </div>
+        <p style="font-size:.75rem;color:rgba(42,16,32,.35);text-align:center;margin:0;">⚠️ Fonctionne uniquement dans Safari (pas Chrome)</p>
+      </div>
+      <!-- Android instructions -->
+      <div id="install-android" style="display:none;">
+        <div style="background:rgba(232,160,176,.1);border-radius:14px;padding:14px 16px;margin-bottom:10px;">
+          <p style="margin:0 0 10px;font-size:.88rem;color:#a03050;font-weight:700;">Sur Android :</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.85rem;color:#2a1020;">
+            <span style="font-size:1.3rem;">1️⃣</span> Appuie sur <strong>⋮</strong> (menu en haut à droite)
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.85rem;color:#2a1020;">
+            <span style="font-size:1.3rem;">2️⃣</span> Appuie sur <strong>"Ajouter à l'écran d'accueil"</strong>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;color:#2a1020;">
+            <span style="font-size:1.3rem;">3️⃣</span> Appuie sur <strong>"Ajouter"</strong>
+          </div>
+        </div>
+      </div>
+      <!-- Generic fallback -->
+      <div id="install-generic" style="display:none;">
+        <div style="background:rgba(232,160,176,.1);border-radius:14px;padding:14px 16px;">
+          <p style="margin:0 0 8px;font-size:.88rem;color:#a03050;font-weight:700;">Comment faire :</p>
+          <p style="margin:0;font-size:.85rem;color:#2a1020;line-height:1.6;">Ouvre le menu de ton navigateur → cherche <strong>"Ajouter à l'écran d'accueil"</strong> ou <strong>"Installer"</strong></p>
+        </div>
+      </div>
+      <button onclick="closeInstallGuide()" style="width:100%;margin-top:16px;background:linear-gradient(135deg,#e8829a,#d46080);color:white;border:none;padding:14px;border-radius:50px;font-size:.95rem;font-family:Lato,sans-serif;cursor:pointer;font-weight:700;">C'est fait, on joue ! 💕</button>
+    </div>
+  </div>
+
   <div id="game" class="hidden" style="width:100%">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:4px;">
+      <button onclick="goHome()" style="background:none;border:none;color:rgba(160,48,80,.45);font-size:.75rem;cursor:pointer;padding:4px 10px;font-family:Lato,sans-serif;display:flex;align-items:center;gap:4px;" title="Accueil">🏠 Accueil</button>
+    </div>
     <div class="day-badge" id="day-badge" style="display:none"></div>
     <div class="progress-wrap">
       <div class="progress-info">
@@ -354,6 +418,73 @@ body{background:#fdf0eb;color:#3a0a1a;font-family:'Lato',sans-serif;min-height:1
 </div>
 
 <script>
+// ══════════════════════════════════════════
+//  INSTALL GUIDE (Add to Home Screen)
+// ══════════════════════════════════════════
+function showInstallGuide(){
+  var overlay = document.getElementById('install-overlay');
+  if(!overlay) return;
+  overlay.style.display = 'flex';
+  var ua = navigator.userAgent || '';
+  var isIOS = /iphone|ipad|ipod/i.test(ua);
+  var isAndroid = /android/i.test(ua);
+  document.getElementById('install-ios').style.display = isIOS ? 'block' : 'none';
+  document.getElementById('install-android').style.display = isAndroid ? 'block' : 'none';
+  document.getElementById('install-generic').style.display = (!isIOS && !isAndroid) ? 'block' : 'none';
+}
+function closeInstallGuide(){
+  var overlay = document.getElementById('install-overlay');
+  if(overlay) overlay.style.display = 'none';
+  // Mark as seen so it doesn't auto-pop again
+  try{ localStorage.setItem('felicia_install_seen','1'); }catch(e){}
+}
+function checkResume(){
+  try{
+    var raw = localStorage.getItem(SAVE_KEY);
+    if(raw){
+      var data = JSON.parse(raw);
+      if(data && data.level > 0){
+        var banner = document.getElementById('resume-banner');
+        var btnFresh = document.getElementById('btn-start-fresh');
+        var installBanner = document.getElementById('install-banner');
+        if(banner) banner.style.display='block';
+        if(btnFresh) btnFresh.style.display='none';
+        if(installBanner) installBanner.style.display='none';
+        return;
+      }
+    }
+  }catch(e){}
+  // No save — show fresh start
+  var banner = document.getElementById('resume-banner');
+  var btnFresh = document.getElementById('btn-start-fresh');
+  var installBanner = document.getElementById('install-banner');
+  if(banner) banner.style.display='none';
+  if(btnFresh) btnFresh.style.display='';
+  // Show install banner only if not yet seen
+  try{
+    if(!localStorage.getItem('felicia_install_seen') && installBanner){
+      installBanner.style.display='block';
+    }
+  }catch(e){}
+}
+function goHome(){
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('puzzle-screen').classList.add('hidden');
+  document.getElementById('final-screen').classList.add('hidden');
+  document.getElementById('intro').classList.remove('hidden');
+  checkResume();
+}
+// Auto-show install guide on very first visit
+(function(){
+  try{
+    if(!localStorage.getItem('felicia_install_seen')){
+      setTimeout(showInstallGuide, 800);
+    }
+  }catch(e){}
+})();
+
+
+
 // ══════════════════════════════════════════
 //  STARS
 // ══════════════════════════════════════════
@@ -950,7 +1081,9 @@ function handleClick(target){
 //  ORDER
 // ══════════════════════════════════════════
 let dragSrc=null;
+var _orderAns='';
 function renderOrder(lvl,card){
+  _orderAns = lvl.ans;
   const shuffled=[...lvl.words].sort(()=>Math.random()-.5);
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
@@ -960,7 +1093,7 @@ function renderOrder(lvl,card){
     <div class="order-list" id="ol">
       ${shuffled.map((w,i)=>`<div class="order-item" data-i="${i}" onclick="orderTap(${i})"><span class="drag-h">⠿</span><span>${w}</span></div>`).join('')}
     </div>
-    <div style="margin-top:13px;text-align:center"><button class="btn-v" onclick="checkOrder('${lvl.ans}')">Valider →</button></div>
+    <div style="margin-top:13px;text-align:center"><button class="btn-v" onclick="checkOrder()">Valider →</button></div>
     <div id="of"></div>`;
 }
 
@@ -1005,7 +1138,8 @@ function dDrop(e,ti){
   dragSrc=null;
 }
 
-function checkOrder(ans){
+function checkOrder(){
+  var ans=_orderAns;
   const cur=[...document.querySelectorAll('.order-item span:last-child')].map(e=>e.textContent.trim()).join(' ');
   const fb=document.getElementById('of');
   if(cur.toLowerCase()===ans.toLowerCase()){
@@ -1022,7 +1156,9 @@ function checkOrder(ans){
 // ══════════════════════════════════════════
 //  ANAGRAM
 // ══════════════════════════════════════════
+var _anagramWord="";
 function renderAnagram(lvl,card){
+  _anagramWord=lvl.word;
   const hid=_storeHint(lvl.h);
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
@@ -1030,14 +1166,15 @@ function renderAnagram(lvl,card){
     <div class="level-question">Démêle ces lettres pour trouver le mot caché :</div>
     <div class="cipher-display">${lvl.anagram}</div>
     <div class="input-row">
-      <input class="txt-in" id="ana" placeholder="Le mot..." onkeydown="if(event.key==='Enter')checkAnagram('${lvl.word}')">
-      <button class="btn-v" onclick="checkAnagram('${lvl.word}')">→</button>
+      <input class="txt-in" id="ana" placeholder="Le mot..." onkeydown="if(event.key==='Enter')checkAnagram()">
+      <button class="btn-v" onclick="checkAnagram()">→</button>
     </div>
     <div id="anf"></div>
     <div class="hint-row"><button class="hint-btn" onclick="showHintById(this,'${hid}')">💡 Indice</button><div class="hint-txt hidden"></div></div>`;
   setTimeout(()=>{const e=document.getElementById('ana');if(e)e.focus();},80);
 }
-function checkAnagram(word){
+function checkAnagram(){
+  var word=_anagramWord;
   const val=(document.getElementById('ana').value||'').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   const fb=document.getElementById('anf');
   if(val===word.toUpperCase()||val===word.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')){
@@ -1054,7 +1191,9 @@ function checkAnagram(word){
 // ══════════════════════════════════════════
 //  CIPHER (Caesar +3)
 // ══════════════════════════════════════════
+var _cipherPlain="";
 function renderCipher(lvl,card){
+  _cipherPlain=lvl.plain;
   const hid=_storeHint(lvl.h);
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
@@ -1062,14 +1201,15 @@ function renderCipher(lvl,card){
     <div class="level-question">Décode ce message (chaque lettre = lettre -3 dans l'alphabet) :</div>
     <div class="cipher-display">${lvl.cipher}</div>
     <div class="input-row">
-      <input class="txt-in" id="ci" placeholder="Le message..." onkeydown="if(event.key==='Enter')checkCipher('${lvl.plain}')">
-      <button class="btn-v" onclick="checkCipher('${lvl.plain}')">→</button>
+      <input class="txt-in" id="ci" placeholder="Le message..." onkeydown="if(event.key==='Enter')checkCipher()">
+      <button class="btn-v" onclick="checkCipher()">→</button>
     </div>
     <div id="cif"></div>
     <div class="hint-row"><button class="hint-btn" onclick="showHintById(this,'${hid}')">💡 Indice</button><div class="hint-txt hidden"></div></div>`;
   setTimeout(()=>{const e=document.getElementById('ci');if(e)e.focus();},80);
 }
-function checkCipher(plain){
+function checkCipher(){
+  var plain=_cipherPlain;
   const val=(document.getElementById('ci').value||'').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   const fb=document.getElementById('cif');
   if(val===plain.toUpperCase()){
@@ -1236,7 +1376,7 @@ function renderPiano(lvl,card){
       <div id="pk" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
         ${lvl.pool.map(inst=>{
           const d = INSTR_MAP[inst];
-          return `<div id="ikey-${inst}" class="piano-key" onclick="pianoHit('${inst}')" style="
+          return `<div id="ikey-${inst}" class="piano-key" data-inst="${inst}" style="
             background:${d?d.color:'#f5e0e8'};
             border:3px solid transparent;
             border-radius:14px;width:70px;height:70px;
@@ -1254,6 +1394,14 @@ function renderPiano(lvl,card){
     </div>
     <div id="pf"></div>`;
   setTimeout(showPianoSequence, 500);
+  // Use event delegation to avoid emoji in onclick attributes
+  var pk = document.getElementById('pk');
+  if(pk){
+    pk.addEventListener('click', function(e){
+      var key = e.target.closest('.piano-key');
+      if(key && key.dataset.inst) pianoHit(key.dataset.inst);
+    });
+  }
 }
 
 function showPianoSequence(){
@@ -1606,7 +1754,7 @@ function renderPlaylist(lvl,card){
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
     <div class="level-type">🎵 Playlist de Nathan</div>
-    <div class="level-question">Nathan écoutait-il cette musique le soir pendant qu'il te parlait ?</div>
+    <div class="level-question">J'écoutais cette musique le soir pendant qu'on se parlait ?</div>
     <div class="playlist-card">
       <iframe
         src="https://www.youtube.com/embed/${lvl.id}?autoplay=1&rel=0&playsinline=1&modestbranding=1"
@@ -2457,8 +2605,10 @@ showFinal = function() {
       if(data && data.level > 0){
         const banner = document.getElementById('resume-banner');
         const btnFresh = document.getElementById('btn-start-fresh');
+        const installBanner = document.getElementById('install-banner');
         if(banner) banner.style.display='block';
         if(btnFresh) btnFresh.style.display='none';
+        if(installBanner) installBanner.style.display='none';
       }
     }
   } catch(e){}
