@@ -680,7 +680,7 @@ function buildLevels() {
     {q:"Combien de messages on s'envoie par jour ?",opts:["Moins de 50","50-100","100-200","+200"],a:3,h:"Beaucoup... vraiment beaucoup"},
     {q:"Quel est le premier cadeau que je t'ai offert ?",opts:["Un bijou","Un bouquet fait maison","Une lettre","Un cadre photo"],a:1,h:"Fait avec les mains et le coeur"},
     {q:"Quel est mon rêve pour notre futur ?",opts:["Voyager ensemble","Vivre ensemble","Se marier","Te rendre heureuse"],a:3,h:"Ce qui compte c'est toi"},
-    {q:"Ce qui me manque le plus de toi ?",opts:["Ta voix","Ton sourire","Tout de toi","Ta présence"],a:2,h:"Le plus simple et le plus précieux"},
+    {q:"Ce qui me manque le plus de toi ?",opts:["Ta voix","Ton sourire","Ta présence","Tout de toi"],a:2,h:"Le plus simple et le plus précieux"},
     {q:"Quelle a été la première série qu'on a regardée ensemble ?",opts:["Dexter","Breaking Bad","Ed Gein Monster","Squid Game"],a:2,h:"Un true crime qui nous a rapprochés"},
     {q:"Dans quelle saison on s'est rencontrés ?",opts:["Printemps","Été","Automne","Hiver"],a:1,h:"Il faisait chaud"},
     {q:"Où je veux aller en vacances cet été ?",opts:["Bali","Maldives","Philippines","Japon"],a:2,h:"Un archipel magnifique en Asie"},
@@ -745,16 +745,16 @@ function buildLevels() {
 
   // ── CIPHER DATA (caesar +3) ──
   const cipherPool = [
-    {plain:"AMOUR",cipher:"DPRXU",h:"Décale chaque lettre de 3"},
-    {plain:"FELICIA",cipher:"IHOLFLD",h:"Code César, décale de 3"},
-    {plain:"NATHAN",cipher:"QDWKDQ",h:"3 lettres en avant dans l'alphabet"},
-    {plain:"BISOUS",cipher:"ELVrxv",h:"César +3"},
-    {plain:"FOREVER",cipher:"IRUHYHU",h:"Décale de 3"},
-    {plain:"CALIN",cipher:"FDOLQ",h:"Alphabet décalé"},
-    {plain:"BONHEUR",cipher:"ERQKHXU",h:"César +3"},
-    {plain:"REVE",cipher:"UHYH",h:"Décale chaque lettre"},
-    {plain:"COEUR",cipher:"FRHXU",h:"3 lettres en avant"},
-    {plain:"ENSEMBLE",cipher:"HQVHPEOH",h:"Code secret +3"},
+    {plain:"AMOUR",cipher:"DPRXU",h:"Recule de 3 lettres dans l'alphabet"},
+    {plain:"FELICIA",cipher:"IHOLFLD",h:"Recule de 3 lettres (ex: I→F)"},
+    {plain:"NATHAN",cipher:"QDWKDQ",h:"Recule de 3 lettres (ex: Q→N)"},
+    {plain:"BISOUS",cipher:"ELVRXV",h:"Recule de 3 lettres pour décoder"},
+    {plain:"FOREVER",cipher:"IRUHYHU",h:"Recule de 3 lettres (ex: I→F)"},
+    {plain:"CALIN",cipher:"FDOLQ",h:"Recule de 3 lettres pour décoder"},
+    {plain:"BONHEUR",cipher:"ERQKHXU",h:"Recule de 3 lettres (ex: E→B)"},
+    {plain:"REVE",cipher:"UHYH",h:"Recule de 3 lettres pour décoder"},
+    {plain:"COEUR",cipher:"FRHXU",h:"Recule de 3 lettres (ex: F→C)"},
+    {plain:"ENSEMBLE",cipher:"HQVHPEOH",h:"Recule de 3 lettres pour décoder"},
   ];
 
   // ── MEMORY SETS ──
@@ -1198,7 +1198,7 @@ function renderCipher(lvl,card){
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
     <div class="level-type">Code Secret 🔐</div>
-    <div class="level-question">Décode ce message (chaque lettre = lettre +3 dans l'alphabet) :</div>
+    <div class="level-question">Décode ce message — chaque lettre a été décalée de +3 (A→D, B→E, C→F…). Pour décoder, fais l'inverse : recule de 3 (D→A, E→B…) :</div>
     <div class="cipher-display">${lvl.cipher}</div>
     <div class="input-row">
       <input class="txt-in" id="ci" placeholder="Le message..." onkeydown="if(event.key==='Enter')checkCipher()">
