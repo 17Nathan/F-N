@@ -673,13 +673,13 @@ function buildLevels() {
   // ── QUIZ DATA (used for multiple quiz blocks) ──
   const quizPool = [
     {q:"Comment on s'est rencontrés ?",opts:["Par des amis","Sur un jeu","Sur les réseaux","Par hasard"],a:1,h:"C'était digital..."},
-    {q:"Quelle est ta couleur préférée ?",opts:["Rose","Marron","Beige","Noir"],a:1,h:"Une teinte douce et élégante"},
+    {q:"Quelle est ta couleur préférée ?",opts:["Rose","Beige","Noir","Marron"],a:3,h:"Une teinte chaude et élégante"},
     {q:"Quel emoji j'envoie le plus ?",opts:["😂","🔥","♥️","😍"],a:2,h:"Plein d'amour"},
     {q:"Je pense à toi...",opts:["Le matin","Le soir","L'après-midi","Tout le temps"],a:3,h:"Sans la moindre exception"},
-    {q:"Selon moi Quelle est ta plus belle qualité ?",opts:["Ton sourire","Ta gentillesse","Ton intelligence","Tout"],a:3,h:"Impossible de choisir une seule"},
+    {q:"Quelle est ta plus belle qualité ?",opts:["Ton sourire","Ta gentillesse","Ton intelligence","Tout de toi"],a:3,h:"Impossible de choisir une seule"},
     {q:"Combien de messages on s'envoie par jour ?",opts:["Moins de 50","50-100","100-200","+200"],a:3,h:"Beaucoup... vraiment beaucoup"},
     {q:"Quel est le premier cadeau que je t'ai offert ?",opts:["Un bijou","Un bouquet fait maison","Une lettre","Un cadre photo"],a:1,h:"Fait avec les mains et le coeur"},
-    {q:"Quel est notre rêve pour notre futur ?",opts:["Voyager ensemble","Vivre ensemble","Se marier","Te rendre heureuse"],a:3,h:"Ce qui compte c'est toi"},
+    {q:"Quel est mon rêve pour notre futur ?",opts:["Voyager ensemble","Vivre ensemble","Se marier","Te rendre heureuse"],a:3,h:"Ce qui compte c'est toi"},
     {q:"Ce qui me manque le plus de toi ?",opts:["Ta voix","Ton sourire","Ta présence","Tout de toi"],a:2,h:"Le plus simple et le plus précieux"},
     {q:"Quelle a été la première série qu'on a regardée ensemble ?",opts:["Dexter","Breaking Bad","Ed Gein Monster","Squid Game"],a:2,h:"Un true crime qui nous a rapprochés"},
     {q:"Dans quelle saison on s'est rencontrés ?",opts:["Printemps","Été","Automne","Hiver"],a:1,h:"Il faisait chaud"},
@@ -692,8 +692,8 @@ function buildLevels() {
     {q:"Première chose que je fais le matin ?",opts:["Me lever","Manger","T'écrire un message","Regarder mon téléphone"],a:2,h:"Tu es ma première pensée"},
     {q:"Comment je te décris en un mot ?",opts:["Belle","Parfaite","Lumineuse","Une bénédiction"],a:3,h:"Plus qu'un simple mot"},
     {q:"Notre plus grande force dans la relation ?",opts:["La confiance","L'humour","La distance temporaire","Notre amour"],a:3,h:"Ce qui nous tient ensemble"},
-    {q:"Notre moment préféré de la journée ?",opts:["Les messages du matin","Les appels FaceTime","Quand on s'appelle","Les messages du soir"],a:2,h:"Ta voix"},
-    {q:"Quelle musique me met de bonne humeur ?",opts:["Baby - Bieber","Has To Be You - Thiago Sub","Afro beat","Rock"],a:1,h:"Une chanson qui parle de nous"},
+    {q:"Notre moment préféré de la journée ?",opts:["Les messages du matin","Les FaceTime audio","Quand on s'appelle","Les messages du soir"],a:2,h:"Ta voix"},
+    {q:"Quelle musique est notre souvenir ?",opts:["Baby - Bieber","Has To Be You - Thiago Sub","Afro beat","Rock"],a:1,h:"Notre musique souvenir"},
     {q:"Ce que je ferais si tu pleurais ?",opts:["Écouter","Te consoler","Te réconforter","Tout ça"],a:2,h:"Je serais là, toujours"},
     {q:"Premier mot que je dirai quand je te verrai ?",opts:["Enfin","Magnifique","Mon amour","Parfaite"],a:2,h:"Les mots qui viennent du coeur"},
     {q:"Dans combien de temps on se revoit ?",opts:["Dans quelques mois","Dans un an","Moins d'un mois","On ne sait pas"],a:2,h:"Très bientôt..."},
@@ -788,22 +788,22 @@ function buildLevels() {
     {q:"On s'endort souvent ensemble au téléphone.",a:true,h:"Une douce habitude qu'on a"},
     {q:"Tu as rencontré ma famille.",a:true,h:"Un grand pas"},
     {q:"J'ai déjà pleuré en pensant à toi.",a:true,h:"Les émotions débordent parfois"},
-    {q:"Je préfère les FaceTime audio aux messages et aux appels normaux.",a:true,h:"Ta voix me suffit"},
+    {q:"Je préfère les FaceTime audio aux messages et aux appels normaux.",a:true,h:"Ta voix, mon appel préféré"},
     {q:"Tu as changé ma vie pour toujours.",a:true,h:"Merci mon amour 💕"},
   ];
 
   // ── CONNECT DATA ──
   const connectPool = [
-    {pairs:[["Nathan","Ton homme"],["Félicia","Ma bénédiction"],["Philippines","La destination que je veux"],["Discord","Là où tout a commencé"]]},
-    {pairs:[["Ed Gein Monster","Notre première série"],["Sleep call","Meilleur Nuit"],["Bouquet fait maison","Mon premier cadeau"],["Distance","Temporaire"]]},
+    {pairs:[["Nathan","Ton homme"],["Félicia","Ma bénédiction"],["Philippines","Mon rêve de vacances"],["Discord","Là où tout a commencé"]]},
+    {pairs:[["Ed Gein Monster","Notre première série"],["Sleep call","S'endormir ensemble au téléphone"],["Bouquet fait maison","Mon premier cadeau"],["Distance","Temporaire"]]},
     {pairs:[["Beige","Ta couleur préférée"],["FaceTime audio","Mon appel préféré"],["Été","La saison de notre rencontre"],["Has To Be You","Ma musique souvenir"]]},
     {pairs:[["Câlin","Ce qui me manque le plus"],["Ton sourire","Ce qui me fait fondre"],["Matin","Je t'écris un message"],["Futur","Ensemble"]]},
-    {pairs:[["Philippines","Mon voyages de cet été"],["Seren","ML"],["Cœur","Pur et sincère"],["PC","Zéro regret"]]},
-    {pairs:[["Bonheur","promesse"],["Vocal","Discord +5H du mat"],["GTA","Début de notre histoire"],["Famille","Tu as rencontré la mienne"]]},
-    {pairs:[["Baiser","Douceur"],["Confidente","Ce que tu es pour moi"],["Rêve","Vivre ensemble"],["GTA","Le commencement"]]},
-    {pairs:[["Forever","Notre promesse"],["Bisous","Quotidien"],["Heureux","Grâce à toi"],["200","Messages"]]},
+    {pairs:[["Philippines","Mon rêve de cet été"],["Seren","Mon surnom pour toi"],["Cœur","Pur et sincère"],["PC","Zéro regret"]]},
+    {pairs:[["Bonheur","Notre promesse"],["Vocal","On s'endort au téléphone"],["Jeu vidéo","Début de notre histoire"],["Famille","Tu as rencontré la mienne"]]},
+    {pairs:[["Baiser","Douceur"],["Confidente","Ce que tu es pour moi"],["Rêve","Vivre ensemble"],["GTA","On y jouait ensemble"]]},
+    {pairs:[["Forever","Notre promesse"],["Bisous","Quotidien"],["Heureux","Grâce à toi"],["200+","Messages par jour"]]},
     {pairs:[["Moins d'un mois","Nos prochaines retrouvailles"],["Bouquet maison","Mon premier cadeau"],["Ne jamais lâcher","Ma promesse"],["Mille aventures","Notre futur"]]},
-    {pairs:[["Larmes de joie","Ce que tu me procure"],["Nathan","Ton homme"],["Ensemble","Pour toujours"],["Amour","Infini"]]},
+    {pairs:[["Larmes de joie","Mon bonheur"],["Nathan","Ton homme"],["Ensemble","Pour toujours"],["Amour","Infini"]]},
   ];
 
   // ── VF & CONNECT indexes ──
@@ -1198,7 +1198,7 @@ function renderCipher(lvl,card){
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
     <div class="level-type">Code Secret 🔐</div>
-    <div class="level-question">Décode ce message (chaque lettre = lettre -3 dans l'alphabet) :</div>
+    <div class="level-question">Décode ce message (chaque lettre = lettre +3 dans l'alphabet) :</div>
     <div class="cipher-display">${lvl.cipher}</div>
     <div class="input-row">
       <input class="txt-in" id="ci" placeholder="Le message..." onkeydown="if(event.key==='Enter')checkCipher()">
@@ -2238,12 +2238,22 @@ function puzzleWin(){
 // ══════════════════════════════════════════
 //  FINAL
 // ══════════════════════════════════════════
-const FINAL_MESSAGE="Mon amour, j’ai essayé de faire quelque chose de différent cette fois-ci, une surprise qui dure plusieurs jours pour que tu penses à moi chaque jour et que tu me sentes encore plus à tes côtés ; je voulais aussi te dire merci d’être toi-même, d’avoir changé ma vie et de lui avoir donné un nouveau tournant, car il y a un an je ne savais pas ce que je voulais faire de ma vie, mais aujourd’hui grâce à toi je sais que je veux simplement rendre la tienne meilleure, parce que c’est ce que tu fais pour moi chaque jour, et pour cela je t’en serai éternellement reconnaissant, merci pour tout mon amour, je t’aime, tu es ma bénédiction et la plus belle chose qui me soit arrivée. 💕";
+const FINAL_MESSAGE=`Mon amour, j'ai essayé de faire quelque chose de différent cette fois-ci : une surprise qui dure plusieurs jours pour que tu penses à moi chaque jour et que tu me sentes encore plus à tes côtés. Je voulais aussi te dire merci d'être toi-même, d'avoir changé ma vie et de lui avoir donné un nouveau tournant, car il y a un an je ne savais pas ce que je voulais faire de ma vie, mais aujourd'hui grâce à toi je sais que je veux simplement rendre la tienne meilleure, parce que c'est ce que tu fais pour moi chaque jour, et pour cela je t'en serai éternellement reconnaissant. Merci pour tout mon amour, je t'aime, tu es ma bénédiction et la plus belle chose qui me soit arrivée. ❤️`;
 
 function showFinal(){
   document.getElementById('puzzle-screen').classList.add('hidden');
   document.getElementById('final-screen').classList.remove('hidden');
-  document.getElementById('final-msg').innerHTML=FINAL_MESSAGE.split('. ').map(s=>`<p style="margin-bottom:10px">${s.trim()}${s.trim().endsWith('.')?'':'.'}</p>`).join('');
+  var fmEl = document.getElementById('final-msg');
+  if(fmEl){
+    fmEl.innerHTML = '';
+    FINAL_MESSAGE.split('. ').forEach(function(s){
+      var p = document.createElement('p');
+      p.style.marginBottom = '10px';
+      var t = s.trim();
+      p.textContent = t + (t.slice(-1) === '.' ? '' : '.');
+      fmEl.appendChild(p);
+    });
+  }
   spawnConfetti();setTimeout(spawnConfetti,1000);setTimeout(spawnConfetti,2000);
 }
 
