@@ -1363,7 +1363,7 @@ function renderPiano(lvl,card){
     <div class="level-type">Mélodie 🎵</div>
     <div class="level-question">Écoute bien... puis répète dans le même ordre !</div>
     <div class="piano-wrap">
-      <!-- Progress dots only — NO note names shown -->
+      
       <div id="piano-dots" style="display:flex;gap:5px;justify-content:center;margin-bottom:14px;">
         ${pianoSeq.map((_,i)=>`<div id="pd${i}" style="width:10px;height:10px;border-radius:50%;background:rgba(196,96,122,.18);transition:background .2s;"></div>`).join('')}
       </div>
@@ -1372,7 +1372,7 @@ function renderPiano(lvl,card){
         background:rgba(232,160,176,.15);border:1px solid rgba(196,96,122,.3);
         color:#c4607a;padding:7px 22px;border-radius:50px;cursor:pointer;font-size:.85rem;
         pointer-events:none;opacity:.4;transition:opacity .3s;">🔁 Réécouter</button>
-      <!-- Instrument buttons — these are BOTH the demo display AND the input -->
+      
       <div id="pk" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
         ${lvl.pool.map(inst=>{
           const d = INSTR_MAP[inst];
