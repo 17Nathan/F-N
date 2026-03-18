@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>L'Aventure de Félicia 💕</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZjBhMGI1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2M0NjA3YSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI2ZmZjVmOCIvPgogIDxwYXRoIGQ9Ik0xNiAyNSBDMTYgMjUgNSAxOCA1IDExIEM1IDcuNSA3LjUgNSAxMSA1IEMxMyA1IDE0LjggNiAxNiA3LjUgQzE3LjIgNiAxOSA1IDIxIDUgQzI0LjUgNSAyNyA3LjUgMjcgMTEgQzI3IDE4IDE2IDI1IDE2IDI1WiIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4=">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
@@ -673,7 +673,7 @@ function buildLevels() {
   // ── QUIZ DATA (used for multiple quiz blocks) ──
   const quizPool = [
     {q:"Comment on s'est rencontrés ?",opts:["Par des amis","Sur un jeu","Sur les réseaux","Par hasard"],a:1,h:"C'était digital..."},
-    {q:"Quelle est ta couleur préférée ?",opts:["Rose","Beige","Noir","Marron"],a:3,h:"Une teinte chaude et élégante"},
+    {q:"Quelle est ta couleur préférée ?",opts:["Rose","Beige","Violet","Bleu"],a:1,h:"Une teinte douce et élégante"},
     {q:"Quel emoji j'envoie le plus ?",opts:["😂","🔥","♥️","😍"],a:2,h:"Plein d'amour"},
     {q:"Je pense à toi...",opts:["Le matin","Le soir","L'après-midi","Tout le temps"],a:3,h:"Sans la moindre exception"},
     {q:"Quelle est ta plus belle qualité ?",opts:["Ton sourire","Ta gentillesse","Ton intelligence","Tout de toi"],a:3,h:"Impossible de choisir une seule"},
@@ -745,16 +745,16 @@ function buildLevels() {
 
   // ── CIPHER DATA (caesar +3) ──
   const cipherPool = [
-    {plain:"AMOUR",cipher:"XJLRO",h:"Ce que je ressens pour toi chaque jour"},
-    {plain:"FELICIA",cipher:"CBIFZFX",h:"Ce qu'on t'a donné à la naissance 💕"},
-    {plain:"NATHAN",cipher:"KXQEXK",h:"Ce qu'on m'a donné à la naissance 😊"},
-    {plain:"BISOUS",cipher:"YFPLRP",h:"Ce que je t'enverrais à travers l'écran"},
-    {plain:"FOREVER",cipher:"CLOBSBO",h:"Pour combien de temps je t'aime"},
-    {plain:"CALIN",cipher:"ZXIFK",h:"Ce qui me manque le plus de toi"},
-    {plain:"BONHEUR",cipher:"YLKEBRO",h:"Ce que tu m'apportes chaque jour"},
-    {plain:"REVE",cipher:"OBSB",h:"Ce que je fais en pensant à notre futur"},
-    {plain:"COEUR",cipher:"ZLBRO",h:"La partie de moi que tu possèdes"},
-    {plain:"ENSEMBLE",cipher:"BKPBJYIB",h:"Comment je veux vivre chaque moment avec toi"},
+    {plain:"AMOUR",cipher:"DPRXU",h:"Décale chaque lettre de 3"},
+    {plain:"FELICIA",cipher:"IHOLFLD",h:"Code César, décale de 3"},
+    {plain:"NATHAN",cipher:"QDWKDQ",h:"3 lettres en avant dans l'alphabet"},
+    {plain:"BISOUS",cipher:"ELVrxv",h:"César +3"},
+    {plain:"FOREVER",cipher:"IRUHYHU",h:"Décale de 3"},
+    {plain:"CALIN",cipher:"FDOLQ",h:"Alphabet décalé"},
+    {plain:"BONHEUR",cipher:"ERQKHXU",h:"César +3"},
+    {plain:"REVE",cipher:"UHYH",h:"Décale chaque lettre"},
+    {plain:"COEUR",cipher:"FRHXU",h:"3 lettres en avant"},
+    {plain:"ENSEMBLE",cipher:"HQVHPEOH",h:"Code secret +3"},
   ];
 
   // ── MEMORY SETS ──
@@ -1198,7 +1198,7 @@ function renderCipher(lvl,card){
   card.innerHTML=`
     <div class="level-badge">💌 Niveau ${currentLevel+1}</div>
     <div class="level-type">Code Secret 🔐</div>
-    <div class="level-question">Ajoute +3 à chaque lettre pour trouver le mot (A→D, B→E, C→F…) :</div>
+    <div class="level-question">Décode ce message (chaque lettre = lettre +3 dans l'alphabet) :</div>
     <div class="cipher-display">${lvl.cipher}</div>
     <div class="input-row">
       <input class="txt-in" id="ci" placeholder="Le message..." onkeydown="if(event.key==='Enter')checkCipher()">
@@ -2238,22 +2238,12 @@ function puzzleWin(){
 // ══════════════════════════════════════════
 //  FINAL
 // ══════════════════════════════════════════
-const FINAL_MESSAGE=`Mon amour, j'ai essayé de faire quelque chose de différent cette fois-ci : une surprise qui dure plusieurs jours pour que tu penses à moi chaque jour et que tu me sentes encore plus à tes côtés. Je voulais aussi te dire merci d'être toi-même, d'avoir changé ma vie et de lui avoir donné un nouveau tournant, car il y a un an je ne savais pas ce que je voulais faire de ma vie, mais aujourd'hui grâce à toi je sais que je veux simplement rendre la tienne meilleure, parce que c'est ce que tu fais pour moi chaque jour, et pour cela je t'en serai éternellement reconnaissant. Merci pour tout mon amour, je t'aime, tu es ma bénédiction et la plus belle chose qui me soit arrivée. ❤️`;
+const FINAL_MESSAGE="EN COURS DE RÉDACTION... 💕";
 
 function showFinal(){
   document.getElementById('puzzle-screen').classList.add('hidden');
   document.getElementById('final-screen').classList.remove('hidden');
-  var fmEl = document.getElementById('final-msg');
-  if(fmEl){
-    fmEl.innerHTML = '';
-    FINAL_MESSAGE.split('. ').forEach(function(s){
-      var p = document.createElement('p');
-      p.style.marginBottom = '10px';
-      var t = s.trim();
-      p.textContent = t + (t.slice(-1) === '.' ? '' : '.');
-      fmEl.appendChild(p);
-    });
-  }
+  document.getElementById('final-msg').innerHTML=FINAL_MESSAGE.split('. ').map(s=>`<p style="margin-bottom:10px">${s.trim()}${s.trim().endsWith('.')?'':'.'}</p>`).join('');
   spawnConfetti();setTimeout(spawnConfetti,1000);setTimeout(spawnConfetti,2000);
 }
 
