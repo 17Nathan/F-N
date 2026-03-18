@@ -2606,6 +2606,13 @@ showFinal = function() {
   setTimeout(spawnConfetti, 2000);
 };
 
+// Sauvegarde automatique quand l'utilisateur quitte / change d'onglet
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden') saveProgress();
+});
+window.addEventListener('pagehide', function(){ saveProgress(); });
+window.addEventListener('beforeunload', function(){ saveProgress(); });
+
 // Check for save on load
 (function(){
   try {
